@@ -34,11 +34,11 @@ struct queue{
     event_list_t* prev_event;
 };
 
-extern event_list_t* queue_event_list; /* Fila de eventos */
 
 /*==========================================================================*/
 
-extern Vaso *filas[QUEUE_WAIT];
+extern event_list_t* queue_event_list; /* Fila de eventos */
+extern Vaso*         filas[QUEUE_WAIT];
 
 /*==========================================================================*/
 
