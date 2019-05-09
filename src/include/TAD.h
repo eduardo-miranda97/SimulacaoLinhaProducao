@@ -5,9 +5,9 @@
 #include "vaso.h"
 
 typedef struct{
-    int8_t vaso;
-    int8_t espc;
-    int8_t arte;
+    int16_t vaso;
+    int8_t  espc;
+    int8_t  arte;
 }utils;
 
 typedef struct{
