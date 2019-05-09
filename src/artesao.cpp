@@ -1,6 +1,6 @@
 #include "./include/artesao.h"
 /* CONSTRUCTOR */
-Artesao::Artesao(u_int16_t id, state_art situation,
+Artesao::Artesao(u_int8_t id, state_art situation,
         u_int32_t time_ociosity, u_int32_t start_ociosity){
     this->id = id;
     this->situation = situation;
@@ -8,7 +8,7 @@ Artesao::Artesao(u_int16_t id, state_art situation,
     this->start_ociosity = start_ociosity;
 }
 /* SET METHODS */
-void Artesao::set_id(u_int16_t id){
+void Artesao::set_id(u_int8_t id){
     this->id = id;
 }
 void Artesao::set_situation(state_art situation){
@@ -21,7 +21,7 @@ void Artesao::set_start_ociosity(u_int32_t start_ociosity){
     this->start_ociosity = start_ociosity;
 }
 /* GET METHODS */
-u_int16_t  Artesao::get_id(){
+u_int8_t  Artesao::get_id(){
     return this->id;
 }
 state_art Artesao::get_situation(){
