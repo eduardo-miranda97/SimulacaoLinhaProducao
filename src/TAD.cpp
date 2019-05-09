@@ -6,7 +6,7 @@ Vaso* filas[QUEUE_WAIT];
 void insert_list_event(event_t event){
     if (!queue_event_list){
        /* (Julio) LISTA VAZIA, PRIMEIRA ADD*/
-       queue_event_list = (event_list_t*) malloc(sizeof(event_list_t));
+       queue_event_list = new event_list_t();
        if (!queue_event_list){
           std::cerr << "\nERROR: Error Alloc Memory for \"queue_event_list\"" << '\n';
           exit(ERROR_MEMORY_ALLOC);
@@ -16,7 +16,7 @@ void insert_list_event(event_t event){
        queue_event_list->prev_event = NULL;
        return;
     }
-    event_list_t* new_event = (event_list_t*) malloc(sizeof(event_list_t));
+    event_list_t* new_event = new event_list_t();
 
     if (!new_event){
        std::cerr << "\nERROR: Error Alloc Memory for \"new_event\"" << '\n';
@@ -61,5 +61,5 @@ void remove_list_event(event_list_t* event){
     if (event->next_event){
         event->next_event->prev_event = event->prev_event;
     }
-    free(event);
+    delete event;
 }
