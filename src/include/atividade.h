@@ -3,6 +3,7 @@
 
 // SET == ACABAMENTO CARALHO.
 
+
 void begin_requets();
 
 void base_preparation();
