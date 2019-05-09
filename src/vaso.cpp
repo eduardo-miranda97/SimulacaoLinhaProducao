@@ -1,4 +1,7 @@
 #include "./include/vaso.h"
+
+ u_int16_t last_id_vaso = 0;
+
 /* CONSTRUCTOR*/
 Vaso::Vaso(u_int16_t id, type_vaso type, u_int32_t start_time){
     this->id         = id;

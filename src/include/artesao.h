@@ -7,7 +7,7 @@ enum state_art{
     OCIOSITY=0, ACTIVE
 };
 
-u_int16_t last_id_arts;
+extern u_int16_t last_id_arts;
 
 class Artesao{
   public:

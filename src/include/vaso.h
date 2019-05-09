@@ -16,7 +16,7 @@ enum name_queue{
     ENV_GERAL,
 };
 
-u_int16_t last_id_vaso;
+extern u_int16_t last_id_vaso;
 
 class Vaso{
   public:

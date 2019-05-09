@@ -7,7 +7,7 @@ enum state_esp{
     OCIOSITY=0, ACTIVE
 };
 
-u_int16_t last_id_espec;
+extern u_int16_t last_id_espec;
 
 class Especialista{
   public:

@@ -1,4 +1,7 @@
 #include "./include/artesao.h"
+
+u_int16_t last_id_arts = 0;
+
 /* CONSTRUCTOR */
 Artesao::Artesao(u_int8_t id, state_art situation,
         u_int32_t time_ociosity, u_int32_t start_ociosity){
