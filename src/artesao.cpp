@@ -1,4 +1,4 @@
-#include "artesao.h"
+#include "./include/artesao.h"
 /* CONSTRUCTOR */
 Artesao::Artesao(u_int16_t id, state_art situation,
         u_int32_t time_ociosity, u_int32_t start_ociosity){
