@@ -1,6 +1,23 @@
 #include "./include/artesao.h"
 
+u_int8_t  SM_quatd_Art = 0;
+Artesao*  SM_Artesao   = NULL;
 u_int16_t last_id_arts = 0;
+
+
+bool ART_FREE(){
+    for (u_int8_t i=0; i < SM_quatd_Art; i++)
+        if (SM_Artesao[i].get_situation() == OCIOSITY_ART)
+            return true;
+    return false;
+}
+
+Artesao* GET_ART_FREE(){
+  for (u_int8_t i=0; i < SM_quatd_Art; i++)
+      if (SM_Artesao[i].get_situation() == OCIOSITY_ART)
+          return SM_Artesao;
+  return NULL;
+}
 
 /* CONSTRUCTOR */
 Artesao::Artesao(u_int8_t id, state_art situation,
@@ -18,7 +35,7 @@ void Artesao::set_situation(state_art situation){
     this->situation = situation;
 }
 void Artesao::set_time_ociosity (u_int32_t time_ociosity){
-    this->time_ociosity = time_ociosity;
+    this->time_ociosity += time_ociosity;
 }
 void Artesao::set_start_ociosity(u_int32_t start_ociosity){
     this->start_ociosity = start_ociosity;
