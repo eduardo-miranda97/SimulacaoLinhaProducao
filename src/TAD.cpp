@@ -1,19 +1,21 @@
 #include "./include/TAD.h"
 
-event_list_t* queue_event_list = NULL;
+event_list_t* SM_list_event_simulation = NULL;
 Vaso* filas[QUEUE_WAIT];
 
 void insert_list_event(event_t event){
-    if (!queue_event_list){
+    if (!SM_list_event_simulation){
        /* (Julio) LISTA VAZIA, PRIMEIRA ADD*/
-       queue_event_list = new event_list_t();
-       if (!queue_event_list){
-          std::cerr << "\nERROR: Error Alloc Memory for \"queue_event_list\"" << '\n';
-          exit(ERROR_MEMORY_ALLOC);
+       SM_list_event_simulation = new event_list_t();
+       if (!SM_list_event_simulation){
+           printf("\n================================================================================");
+           printf("\n[ERRO] falha na alocação de memoria em insert_list_event()\n\n");
+           printf("\n================================================================================\n");
+           exit(ERRO_MEMORY_ACESS);
        }
-       queue_event_list->event      = event;
-       queue_event_list->next_event = NULL;
-       queue_event_list->prev_event = NULL;
+       SM_list_event_simulation->event      = event;
+       SM_list_event_simulation->next_event = NULL;
+       SM_list_event_simulation->prev_event = NULL;
        return;
     }
     event_list_t* new_event = new event_list_t();
@@ -24,7 +26,7 @@ void insert_list_event(event_t event){
     }
 
     new_event->event = event;
-    event_list_t* ptr_event = queue_event_list;
+    event_list_t* ptr_event = SM_list_event_simulation;
 
     do{
       if (event.time_event < ptr_event->event.time_event){
@@ -34,7 +36,7 @@ void insert_list_event(event_t event){
          if (new_event->prev_event){
             new_event->prev_event->next_event = new_event;
          }else{
-            queue_event_list = new_event;
+            SM_list_event_simulation = new_event;
          }
          ptr_event->prev_event = new_event;
          return;
@@ -53,7 +55,7 @@ void insert_list_event(event_t event){
 void remove_list_event(event_list_t* event){
     /*(Julio) CASO ONDE ESTA REMOVENDO A FIRST (CABEÇA)*/
     if (!event->prev_event){
-        queue_event_list = event->next_event;
+        SM_list_event_simulation = event->next_event;
     }else{
         event->prev_event->next_event = event->next_event;
     }
