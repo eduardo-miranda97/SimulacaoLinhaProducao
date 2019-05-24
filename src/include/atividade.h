@@ -12,11 +12,13 @@
 // SET == ACABAMENTO CARALHO.
 
 
-void begin_requets();       // EVENTO := 'CHEGADA DE PEDIDOS'
+void init_simulation();
+
+void begin_requets(void* ptr);       // EVENTO := 'CHEGADA DE PEDIDOS'
+
+void base_preparation(void* ptr);    // EVENTO := 'PREPARA_FORMA'
 //
-void base_preparation();
-//
-// void base_set_init();
+void base_set_init(void* ptr);
 //
 // void base_set_drying();
 //
