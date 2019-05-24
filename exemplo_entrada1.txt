@@ -28,7 +28,7 @@ G TSM 43200
 #                                                          #
 ############################################################
 
-# tempo de artesãos na simulação
+# Numero de artesãos na simulação
 
 num_art 2
 
@@ -38,7 +38,7 @@ num_art 2
 #                                                          #
 ############################################################
 
-# tempo de especialistas na simulação
+# Numero de especialistas na simulação
 
 num_esp 3
 
