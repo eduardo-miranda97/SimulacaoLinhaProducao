@@ -4,38 +4,61 @@
 #include <iostream>
 #include <cstdlib>
 
-#define QUEUE_WAIT 6
-#define ERROR_ACESS_ARRAY 1
+#define ERRO_ARRAY_ACESS        1
+#define ERRO_MEMORY_ACESS       2
+/* #define  ERRO_CALC          7 in triangular.h */
+
+#define QUEUE_WAIT              6
+
+#define MASSA_SMALL             1
+#define MASSA_MEDIAM            2
+#define MASSA_BIG               4
+
+#define SPACE_SMALL             1
+#define SPACE_MEDIAM            2
+#define SPACE_BIG               4
+
+
+class Vaso;
+extern Vaso***     SM_queue_vasos;
+extern u_int16_t   SM_length_queue_vasos[QUEUE_WAIT];
+
+enum name_queue{
+    PREPARA_BASE=0 , LIMP_ACAB_BASE, PREP_BOCA,  LIMP_ACAB_BOCA, IMP_INTER,
+    ENV_GERAL,
+};
 
 enum type_vaso{
     SMALL='S', MEDIUM='M', BIG='B'
 };
 
-enum name_queue{
-    INICIO=0 , LIMP_ACAB_BASE, PREP_BOCA,  LIMP_ACAB_BOCA, IMP_INTER,
-    ENV_GERAL,
-};
-
-extern u_int16_t last_id_vaso;
+extern u_int32_t last_id_vaso;
 
 class Vaso{
   public:
-    /* CONSTRUCTOR*/
-    Vaso(u_int16_t id, type_vaso type, u_int32_t start_time);
+    /* VAR STATIC PUBLIC */
+    static float prob_small;
+    static float prob_medium;
+    static float prob_big;
+    /* CONSTRUCTOR AND FUNCTIONS*/
+    Vaso(u_int32_t id, type_vaso type, u_int32_t start_time);
+    static type_vaso rand_type();
     /* SETS METHODS */
-    void set_id(u_int16_t id);
-    void set_type(type_vaso type);
-    void set_start_time(u_int32_t start_time);
-    void set_end_time(u_int32_t end_time);
-    void set_queue(u_int32_t queue[QUEUE_WAIT]);
-    void set_queue(u_int32_t time, name_queue pos);
+    void       set_id(u_int32_t id);
+    void       set_type(type_vaso type);
+    void       set_start_time(u_int32_t start_time);
+    void       set_end_time(u_int32_t end_time);
+    void       set_queue(u_int32_t queue[QUEUE_WAIT]);
+    void       set_queue(u_int32_t time, u_int8_t pos);
     /* GETS METHODS */
-    u_int16_t  get_id();
+    u_int32_t  get_id();
     type_vaso  get_type();
+    u_int8_t   get_quatd_massa();
+    u_int8_t   get_quatd_espace();
     u_int32_t  get_start_time();
     u_int32_t  get_end_time();
     u_int32_t* get_queue();
-    u_int32_t  get_queue(name_queue pos);
+    u_int32_t  get_queue(u_int8_t pos);
 
   private:
     u_int16_t id;

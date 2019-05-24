@@ -1,9 +1,17 @@
 #include "./include/vaso.h"
 
- u_int16_t last_id_vaso = 0;
+ u_int32_t last_id_vaso = 0;
 
-/* CONSTRUCTOR*/
-Vaso::Vaso(u_int16_t id, type_vaso type, u_int32_t start_time){
+float Vaso::prob_small   = 0;
+float Vaso::prob_medium  = 0;
+float Vaso::prob_big     = 0;
+Vaso*** SM_queue_vasos  = NULL;
+u_int16_t SM_length_queue_vasos[QUEUE_WAIT];
+
+
+
+/* CONSTRUCTOR AND FUNCTIONS*/
+Vaso::Vaso(u_int32_t id, type_vaso type, u_int32_t start_time){
     this->id         = id;
     this->type       = type;
     this->start_time = start_time;
@@ -12,8 +20,29 @@ Vaso::Vaso(u_int16_t id, type_vaso type, u_int32_t start_time){
     for(int i=0; i < QUEUE_WAIT; i++)
       this->queue[i] = 0;
 }
+
+type_vaso Vaso::rand_type(){
+    float prob = ((float)rand()/RAND_MAX);
+    if (prob <= prob_small)
+       return SMALL;
+    else if (prob <= prob_medium)
+       return MEDIUM;
+    else
+      return BIG;
+}
+
+u_int8_t Vaso::get_quatd_espace(){
+    if (this->type == SMALL)
+        return SPACE_SMALL;
+    if (this->type == MEDIUM)
+        return SPACE_MEDIAM;
+    if (this->type == BIG)
+        return SPACE_BIG;
+    return SPACE_BIG;  //somente para não da warning, não é necessario.
+}
+
 /* SETS METHODS */
-void Vaso::set_id(u_int16_t id){
+void Vaso::set_id(u_int32_t id){
     this->id = id;
 }
 void Vaso::set_type(type_vaso type){
@@ -29,15 +58,24 @@ void Vaso::set_queue(u_int32_t queue[QUEUE_WAIT]){
     for(int i=0; i < QUEUE_WAIT; i++)
         this->queue[i] = queue[i];
 }
-void Vaso::set_queue(u_int32_t time, name_queue pos){
+void Vaso::set_queue(u_int32_t time, u_int8_t pos){
     this->queue[pos] = time;
 }
 /* GETS METHODS */
-u_int16_t  Vaso::get_id(){
+u_int32_t  Vaso::get_id(){
     return this->id;
 }
 type_vaso  Vaso::get_type(){
     return this->type;
+}
+u_int8_t Vaso::get_quatd_massa(){
+    if (this->type == SMALL)
+        return MASSA_SMALL;
+    if (this->type == MEDIUM)
+        return MASSA_MEDIAM;
+    if (this->type == BIG)
+        return MASSA_BIG;
+    return MASSA_BIG;  //somente para não da warning, não é necessario.
 }
 u_int32_t  Vaso::get_start_time(){
     return this->start_time;
@@ -48,10 +86,10 @@ u_int32_t  Vaso::get_end_time(){
 u_int32_t* Vaso::get_queue(){
     return this->queue;
 }
-u_int32_t  Vaso::get_queue(name_queue pos){
+u_int32_t  Vaso::get_queue(u_int8_t pos){
     if (pos < 0 || pos >= QUEUE_WAIT){
         std::cerr << "Error: Posição de acesso invalida, array queue (VASO)" << '\n';
-        exit(ERROR_ACESS_ARRAY);
+        exit(ERRO_ARRAY_ACESS);
     }
     return this->queue[pos];
 }
