@@ -1,5 +1,23 @@
 #include "./include/especialista.h"
 
+ u_int8_t      SM_quatd_Esp    = 0;
+ Especialista* SM_Especialista = NULL;
+ u_int16_t     last_id_espec   = 0;
+
+bool ESP_FREE(){
+    for (u_int8_t i=0; i < SM_quatd_Esp; i++)
+        if (SM_Especialista[i].get_situation() == OCIOSITY_ESP)
+           return true;
+    return false;
+}
+
+Especialista* GET_ESP_FREE(){
+    for (u_int8_t i=0; i < SM_quatd_Esp; i++)
+        if (SM_Especialista[i].get_situation() == OCIOSITY_ESP)
+           SM_Especialista[i];
+    return NULL;
+}
+
 /* CONSTRUCTOR*/
 Especialista::Especialista(u_int8_t  id, state_esp situation,
             u_int32_t time_ociosity, u_int32_t start_ociosity){
