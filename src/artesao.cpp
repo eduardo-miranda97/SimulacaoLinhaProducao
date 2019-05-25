@@ -15,7 +15,7 @@ bool ART_FREE(){
 Artesao* GET_ART_FREE(){
   for (u_int8_t i=0; i < SM_quatd_Art; i++)
       if (SM_Artesao[i].get_situation() == OCIOSITY_ART)
-          return SM_Artesao;
+          return &(SM_Artesao[i]);
   return NULL;
 }
 
