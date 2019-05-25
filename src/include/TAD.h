@@ -21,7 +21,7 @@ typedef struct{
 
 typedef struct{
     double  time_event;
-    void    (*funct_event)(void*);
+    void    (*funct_event)();
     utils   uses;
 }event_t;
 
