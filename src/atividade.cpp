@@ -53,18 +53,18 @@ void begin_requets(){
                           artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
                           event.time_event  = (SM_time_simulation+trand(times));
                           event.funct_event = &base_preparation;
-                          event.uses->vaso  = vaso;
-                          event.uses->art   = artesao;
-                          event.uses->esp   = NULL;
+                          event.uses.vaso  = vaso;
+                          event.uses.art   = artesao;
+                          event.uses.esp   = NULL;
                       }else{
                           Especialista* especialista = GET_ESP_FREE();
                           especialista->set_situation(state_esp::ACTIVE_ESP);
                           especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
                           event.time_event  = (SM_time_simulation+trand(times));
                           event.funct_event = &base_preparation;
-                          event.uses->vaso  = vaso;
-                          event.uses->art   = NULL;
-                          event.uses->esp   = especialista;
+                          event.uses.vaso  = vaso;
+                          event.uses.art   = NULL;
+                          event.uses.esp   = especialista;
                       }
                       insert_list_event(event);
                       continue;
@@ -76,7 +76,7 @@ void begin_requets(){
 
 void base_preparation(){
     times_triangular_t times;
-    if (SM_list_event_simulation[0].event.uses->vaso){
+    if (SM_list_event_simulation[0].event.uses.vaso){
         event_t evento = SM_list_event_simulation[0].event;
         if (evento.uses.vaso->get_type() == SMALL){
             times.time_min  = 10;
