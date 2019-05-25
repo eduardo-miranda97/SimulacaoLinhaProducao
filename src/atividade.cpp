@@ -12,10 +12,10 @@ void init_simulation(){
         insert_list_event(event);
         u_int8_t quatd_pedidos = trand(tring_pedidos);
         start_time            += (quatd_pedidos*DAYINMINUTES);
-    }while(start_time < SM_final_time_simulation); //final
+    }while(start_time < SM_final_time_simulation);
 }
 
-void begin_requets(void* ptr){
+void begin_requets(){
       u_int16_t quatd_vasos = trand(SM_quatd_vasos);
       for (u_int16_t i=0; i < quatd_vasos; i++){
           Vaso *vaso = new Vaso(last_id_vaso++, Vaso::rand_type(), SM_time_simulation);
@@ -25,63 +25,80 @@ void begin_requets(void* ptr){
               printf("\n================================================================================\n");
               exit(ERRO_MEMORY_ACESS);
           }
-          if (ART_FREE() || ESP_FREE()){
+          if (ART_FREE() || ESP_FREE())
              if (SM_massa >= vaso->get_quatd_massa())
                 if (SM_espaco_secagem >= vaso->get_quatd_espace()){
-                    SM_massa          -= vaso->get_quatd_massa();
-                    SM_espaco_secagem -= vaso->get_quatd_espace();
-                    times_triangular_t times;
+                      SM_massa          -= vaso->get_quatd_massa();
+                      SM_espaco_secagem -= vaso->get_quatd_espace();
 
-                    if (vaso->get_type() == SMALL){
-                        times_triangular_t times = {1,2,3};
-                    }else if (vaso->get_type() == MEDIUM){
-                        times_triangular_t times = {2,4,6};
-                    }else{
-                        times_triangular_t times = {4,6,8};
-                    }
+                      times_triangular_t times;
+                      if (vaso->get_type() == SMALL){
+                          times.time_min  = 1;
+                          times.time_mode = 2;
+                          times.time_max  = 3;
+                      }else if (vaso->get_type() == MEDIUM){
+                          times.time_min  = 2;
+                          times.time_mode = 4;
+                          times.time_max  = 6;
+                      }else{
+                          times.time_min  = 4;
+                          times.time_mode = 6;
+                          times.time_max  = 8;
+                      }
 
-                    event_t event;
-                    if (ART_FREE()){
-                        Artesao* artesao = GET_ART_FREE();
-                        artesao->set_situation(state_art::ACTIVE_ART);
-                        artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
-                        event_t event = {SM_time_simulation+trand(times), &base_preparation, {vaso, artesao, NULL}};
-                    }else{
-                        Especialista* especialista = GET_ESP_FREE();
-                        especialista->set_situation(state_esp::ACTIVE_ESP);
-                        especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
-                        event_t event = {SM_time_simulation+trand(times), &base_preparation, {vaso, NULL, especialista}};
-                    }
-                    insert_list_event(event);
-                }
-          }else{
+                      event_t event;
+                      if (ART_FREE()){
+                          Artesao* artesao = GET_ART_FREE();
+                          artesao->set_situation(state_art::ACTIVE_ART);
+                          artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
+                          event.time_event  = (SM_time_simulation+trand(times));
+                          event.funct_event = &base_preparation;
+                          event.uses->vaso  = vaso;
+                          event.uses->art   = artesao;
+                          event.uses->esp   = NULL;
+                      }else{
+                          Especialista* especialista = GET_ESP_FREE();
+                          especialista->set_situation(state_esp::ACTIVE_ESP);
+                          especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
+                          event.time_event  = (SM_time_simulation+trand(times));
+                          event.funct_event = &base_preparation;
+                          event.uses->vaso  = vaso;
+                          event.uses->art   = NULL;
+                          event.uses->esp   = especialista;
+                      }
+                      insert_list_event(event);
+                      continue;
+            }
             vaso->set_queue(SM_time_simulation, PREPARA_BASE);
             put_vaso_fila(vaso, PREPARA_BASE);
-          }
       }
 }
 
-void base_preparation(void* ptr){
-    /*verifica filas*/
+void base_preparation(){
     times_triangular_t times;
-    if (ptr){
-        event_t* event = (event_t*) ptr;
-        if (event->uses.vaso->get_type() == SMALL){
-            times_triangular_t times = {10,15,20};
-        }else if (event->uses.vaso->get_type() == MEDIUM){
-            times_triangular_t times = {30,40,50};
+    if (SM_list_event_simulation[0].event.uses->vaso){
+        event_t evento = SM_list_event_simulation[0].event;
+        if (evento.uses.vaso->get_type() == SMALL){
+            times.time_min  = 10;
+            times.time_mode = 15;
+            times.time_max  = 20;
+        }else if (evento.uses.vaso->get_type() == MEDIUM){
+            times.time_min  = 20;
+            times.time_mode = 25;
+            times.time_max  = 30;
         }else{
-            times_triangular_t times = {100,120,140};
+            times.time_min  = 40;
+            times.time_mode = 50;
+            times.time_max  = 60;
         }
-        event_t new_event = {SM_time_simulation+trand(times), &base_set_init, event->uses};
-        // remove_list_event(event);
+        event_t new_event = {SM_time_simulation+trand(times), &base_set_init, evento.uses};
         insert_list_event(new_event);
         return;
     }
-    /*agora busca pelas filas*/
+    /* Verificar filas em ordem a ser definida, REUNIR PARA DISCUTIR*/
 }
 
 
-void base_set_init(void* ptr){
+void base_set_init(){
 
 }
