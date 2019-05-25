@@ -20,14 +20,38 @@ int main(int argc, char* argv[]){
       pop_vaso_fila(PREPARA_BASE);
     }
     */
-
+    SM_Artesao = (Artesao*)malloc(sizeof(Artesao)*2);
+    SM_quatd_Art = 2;
+    Artesao a0(0,OCIOSITY_ART,0,0);
+    SM_Artesao[0] = a0;
+    Artesao a1(1,OCIOSITY_ART,0,0);
+    SM_Artesao[1] = a1;
     init_simulation();
-    begin_requets(NULL);
-
-    for (int i=0; i<SM_length_queue_vasos[PREPARA_BASE];i++){
-      std::cout << "ID:\t" << SM_queue_vasos[PREPARA_BASE][i]->get_id() << "\tTIME:\t" <<  SM_queue_vasos[PREPARA_BASE][i]->get_queue(PREPARA_BASE) << '\n';
+    // begin_requets();
+    event_list_t* aux = SM_list_event_simulation;
+    aux->event.funct_event();
+    remove_list_event(SM_list_event_simulation);
+    aux = SM_list_event_simulation;
+    aux->event.funct_event();
+    remove_list_event(SM_list_event_simulation);
+    // aux = SM_list_event_simulation;
+    // aux->event.funct_event();
+    // remove_list_event(SM_list_event_simulation);
+    // for (int i=0; i<SM_length_queue_vasos[PREPARA_BASE];i++){
+    //   std::cout << "ID:\t" << SM_queue_vasos[PREPARA_BASE][i]->get_id() << "\tTIME:\t" <<  SM_queue_vasos[PREPARA_BASE][i]->get_queue(PREPARA_BASE) << '\n';
+    // }
+    for(event_list_t* aux=SM_list_event_simulation;aux;aux=aux->next_event){
+        if ((aux->event.funct_event)==&begin_requets){
+            std::cout << "begin_requets ";
+            std::cout << "time: " << aux->event.time_event << '\n';
+        }else if ((aux->event.funct_event)==&base_preparation){
+            std::cout << "base_preparation ";
+            std::cout << "time: " << aux->event.time_event << '\n';
+        }else if ((aux->event.funct_event)==&base_set_init){
+            std::cout << "base_set_init ";
+            std::cout << "time: " << aux->event.time_event << '\n';
+        }
     }
-
 
     return 0;
 }
