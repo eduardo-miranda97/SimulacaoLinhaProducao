@@ -14,7 +14,7 @@ bool ESP_FREE(){
 Especialista* GET_ESP_FREE(){
     for (u_int8_t i=0; i < SM_quatd_Esp; i++)
         if (SM_Especialista[i].get_situation() == OCIOSITY_ESP)
-           SM_Especialista[i];
+           return &(SM_Especialista[i]);
     return NULL;
 }
 
