@@ -45,7 +45,7 @@ Artesao* Artesao::get_free(){
 
 /* CONSTRUCTOR */
 Artesao::Artesao(){
-    this->id             = last_id_arts;
+    this->id             = last_id_arts++;
     this->situation      = state_art::OCIOSITY_ART;
     this->time_ociosity  = 0;
     this->start_ociosity = 0;
