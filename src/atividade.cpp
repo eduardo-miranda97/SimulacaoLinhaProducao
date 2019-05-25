@@ -26,6 +26,7 @@ void init_simulation(){
 
 void begin_requets(){
       printf("CHEGADA PEDIDO  Time: %lf\n", SM_list_event_simulation[0].event.time_event);
+      SM_time_simulation = SM_list_event_simulation[0].event.time_event;
       remove_list_event(&(SM_list_event_simulation[0]));
       u_int16_t quatd_vasos = trand(SM_quatd_vasos);
       for (u_int16_t i=0; i < quatd_vasos; i++){
@@ -91,6 +92,7 @@ void begin_requets(){
 
 void base_preparation(){
     times_triangular_t times;
+    SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     if (SM_list_event_simulation[0].event.uses.vaso){
         event_t evento = SM_list_event_simulation[0].event;
         printf("FIM PREPARA_BASE vaso: ID %ld ", evento.uses.vaso->get_id());
@@ -134,5 +136,6 @@ void base_preparation(){
 
 void base_set_init(){
     printf("SEM IMPLEMENTAR AINDA\n");
+    SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     remove_list_event(&(SM_list_event_simulation[0]));
 }
