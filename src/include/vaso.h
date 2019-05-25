@@ -41,18 +41,18 @@ class Vaso{
     static float prob_medium;
     static float prob_big;
     /* CONSTRUCTOR AND FUNCTIONS*/
-    Vaso(u_int32_t id, type_vaso type, u_int32_t start_time);
-    static type_vaso rand_type();
+    Vaso(u_int32_t id, u_int32_t start_time);
+    static u_int8_t rand_type();
     /* SETS METHODS */
     void       set_id(u_int32_t id);
-    void       set_type(type_vaso type);
+    void       set_type(u_int8_t type);
     void       set_start_time(u_int32_t start_time);
     void       set_end_time(u_int32_t end_time);
     void       set_queue(u_int32_t queue[QUEUE_WAIT]);
     void       set_queue(u_int32_t time, u_int8_t pos);
     /* GETS METHODS */
     u_int32_t  get_id();
-    type_vaso  get_type();
+    u_int8_t   get_type();
     u_int8_t   get_quatd_massa();
     u_int8_t   get_quatd_espace();
     u_int32_t  get_start_time();
@@ -62,7 +62,7 @@ class Vaso{
 
   private:
     u_int16_t id;
-    type_vaso type;
+    u_int8_t  type;
     u_int32_t start_time;
     u_int32_t end_time;
     u_int32_t queue[QUEUE_WAIT];  /* Tempo acumulador em cada fila */

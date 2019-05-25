@@ -8,20 +8,22 @@ float Vaso::prob_big     = 0.4;
 Vaso*** SM_queue_vasos  = NULL;
 u_int16_t SM_length_queue_vasos[QUEUE_WAIT];
 
+u_int8_t rand_type();
 
 
 /* CONSTRUCTOR AND FUNCTIONS*/
-Vaso::Vaso(u_int32_t id, type_vaso type, u_int32_t start_time){
+Vaso::Vaso(u_int32_t id, u_int32_t start_time){
     this->id         = id;
     this->type       = type;
     this->start_time = start_time;
     this->end_time   = 0;
+    this->type       = Vaso::rand_type();
 
     for(int i=0; i < QUEUE_WAIT; i++)
       this->queue[i] = 0;
 }
 
-type_vaso Vaso::rand_type(){
+u_int8_t Vaso::rand_type(){
     float prob = ((float)rand()/RAND_MAX);
     if (prob <= prob_small)
        return SMALL;
@@ -44,7 +46,7 @@ u_int8_t Vaso::get_quatd_espace(){
 void Vaso::set_id(u_int32_t id){
     this->id = id;
 }
-void Vaso::set_type(type_vaso type){
+void Vaso::set_type(u_int8_t type){
     this->type = type;
 }
 void Vaso::set_start_time(u_int32_t start_time){
@@ -64,7 +66,7 @@ void Vaso::set_queue(u_int32_t time, u_int8_t pos){
 u_int32_t  Vaso::get_id(){
     return this->id;
 }
-type_vaso  Vaso::get_type(){
+u_int8_t  Vaso::get_type(){
     return this->type;
 }
 u_int8_t Vaso::get_quatd_massa(){
