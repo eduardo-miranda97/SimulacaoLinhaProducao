@@ -2,9 +2,9 @@
 
  u_int32_t last_id_vaso = 0;
 
-float Vaso::prob_small   = 0;
-float Vaso::prob_medium  = 0;
-float Vaso::prob_big     = 0;
+float Vaso::prob_small   = 0.3;
+float Vaso::prob_medium  = 0.3;
+float Vaso::prob_big     = 0.4;
 Vaso*** SM_queue_vasos  = NULL;
 u_int16_t SM_length_queue_vasos[QUEUE_WAIT];
 
@@ -25,10 +25,9 @@ type_vaso Vaso::rand_type(){
     float prob = ((float)rand()/RAND_MAX);
     if (prob <= prob_small)
        return SMALL;
-    else if (prob <= prob_medium)
+    else if (prob <= (prob_medium+prob_small))
        return MEDIUM;
-    else
-      return BIG;
+    return BIG;
 }
 
 u_int8_t Vaso::get_quatd_espace(){
