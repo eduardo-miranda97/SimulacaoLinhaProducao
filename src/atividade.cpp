@@ -38,7 +38,7 @@ void begin_requets(){
               printf("\n================================================================================\n");
               exit(ERRO_MEMORY_ACESS);
           }
-          if (Artesao::is_free() || Artesao::is_free())
+          if (Artesao::is_free() || Especialista::is_free())
              if (SM_massa >= vaso->get_quatd_massa())
                 if (SM_espaco_secagem >= vaso->get_quatd_espace()){
                       SM_massa          -= vaso->get_quatd_massa();
