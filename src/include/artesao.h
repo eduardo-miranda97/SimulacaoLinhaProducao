@@ -1,25 +1,30 @@
 #ifndef ARTES
 #define  ARTES
 
+#ifndef ERRO_MEMORY_ACESS
+#define  ERRO_MEMORY_ACESS        2
+#endif
+
+#include <iostream>
 #include <cstdlib>
 
+
 class Artesao;
-extern u_int8_t  SM_quatd_Art;
-extern Artesao*  SM_Artesao;
-extern u_int16_t last_id_arts;
+extern u_int8_t   SM_quatd_Art;
+extern Artesao**  SM_Artesao;
+extern u_int16_t  last_id_arts;
 
 enum state_art{
     OCIOSITY_ART=0, ACTIVE_ART
 };
 
-Artesao*        GET_ART_FREE();
-bool            ART_FREE();
-
 class Artesao{
   public:
     /* CONSTRUCTOR */
-    Artesao(u_int8_t id, state_art situation,
-            u_int32_t time_ociosity, u_int32_t start_ociosity);
+    Artesao();
+    static bool     is_free();
+    static void     add_art(Artesao* artesao);
+    static Artesao* get_free();
     /* SET METHODS */
     void      set_id(u_int8_t id);
     void      set_situation(state_art situation);

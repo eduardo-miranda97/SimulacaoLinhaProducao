@@ -38,7 +38,7 @@ void begin_requets(){
               printf("\n================================================================================\n");
               exit(ERRO_MEMORY_ACESS);
           }
-          if (ART_FREE() || ESP_FREE())
+          if (Artesao::is_free() || Artesao::is_free())
              if (SM_massa >= vaso->get_quatd_massa())
                 if (SM_espaco_secagem >= vaso->get_quatd_espace()){
                       SM_massa          -= vaso->get_quatd_massa();
@@ -60,8 +60,8 @@ void begin_requets(){
                       }
 
                       event_t event;
-                      if (ART_FREE()){
-                          Artesao* artesao = GET_ART_FREE();
+                      if (Artesao::is_free()){
+                          Artesao* artesao = Artesao::get_free();
                           printf("Agendando PREPARA_BASE vaso ID: %ld com artesao ID: %d\n", vaso->get_id(), artesao->get_id());
                           artesao->set_situation(state_art::ACTIVE_ART);
                           artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
@@ -71,7 +71,7 @@ void begin_requets(){
                           event.uses.art    = artesao;
                           event.uses.esp    = NULL;
                       }else{
-                          Especialista* especialista = GET_ESP_FREE();
+                          Especialista* especialista = Especialista::get_free();
                           printf("Agendando PREPARA_BASE vaso ID: %ld com Especialista ID: %d\n", vaso->get_id(), especialista->get_id());
                           especialista->set_situation(state_esp::ACTIVE_ESP);
                           especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
@@ -131,6 +131,7 @@ void base_preparation(){
     }
     remove_list_event(&(SM_list_event_simulation[0]));
     /* Verificar filas em ordem a ser definida, REUNIR PARA DISCUTIR*/
+
 }
 
 
@@ -138,4 +139,5 @@ void base_set_init(){
     printf("SEM IMPLEMENTAR AINDA\n");
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     remove_list_event(&(SM_list_event_simulation[0]));
+
 }

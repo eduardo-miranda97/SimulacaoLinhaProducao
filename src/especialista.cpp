@@ -1,30 +1,53 @@
 #include "./include/especialista.h"
 
- u_int8_t      SM_quatd_Esp    = 0;
- Especialista* SM_Especialista = NULL;
- u_int16_t     last_id_espec   = 0;
+ u_int8_t       SM_quatd_Esp    = 0;
+ Especialista** SM_Especialista = NULL;
+ u_int16_t      last_id_espec   = 0;
 
-bool ESP_FREE(){
+/* STATIC METHODS */
+void Especialista::add_esp(Especialista* especialista){
+    if (!SM_Especialista){
+        SM_Especialista    = (Especialista**) malloc(sizeof(Especialista*));
+        if (!SM_Especialista){
+            printf("\n================================================================================\n");
+            printf("\n[ERRO] falha na alocação de memoria em Especialista::add_esp()\n\n");
+            printf("\n================================================================================\n");
+            exit(ERRO_MEMORY_ACESS);
+        }
+        SM_quatd_Esp  = 1;
+        SM_Especialista[0] = especialista;
+        return;
+    }
+    SM_Especialista = (Especialista**) realloc(SM_Especialista, sizeof(Especialista*)*(++SM_quatd_Esp));
+    if (!SM_Especialista){
+        printf("\n================================================================================\n");
+        printf("\n[ERRO] falha na alocação de memoria em Especialista::add_esp()\n\n");
+        printf("\n================================================================================\n");
+        exit(ERRO_MEMORY_ACESS);
+    }
+    SM_Especialista[SM_quatd_Esp-1] = especialista;
+}
+
+bool Especialista::is_free(){
     for (u_int8_t i=0; i < SM_quatd_Esp; i++)
-        if (SM_Especialista[i].get_situation() == OCIOSITY_ESP)
+        if (SM_Especialista[i]->get_situation() == OCIOSITY_ESP)
            return true;
     return false;
 }
 
-Especialista* GET_ESP_FREE(){
+Especialista* Especialista::get_free(){
     for (u_int8_t i=0; i < SM_quatd_Esp; i++)
-        if (SM_Especialista[i].get_situation() == OCIOSITY_ESP)
-           return &(SM_Especialista[i]);
+        if (SM_Especialista[i]->get_situation() == OCIOSITY_ESP)
+           return SM_Especialista[i];
     return NULL;
 }
 
 /* CONSTRUCTOR*/
-Especialista::Especialista(u_int8_t  id, state_esp situation,
-            u_int32_t time_ociosity, u_int32_t start_ociosity){
-    this->id             = id;
-    this->situation      = situation;
-    this->time_ociosity  = time_ociosity;
-    this->start_ociosity = start_ociosity;
+Especialista::Especialista(){
+    this->id             = last_id_espec++;
+    this->situation      = state_esp::OCIOSITY_ESP;
+    this->time_ociosity  = 0;
+    this->start_ociosity = 0;
 }
 /* SET METHODS */
 void Especialista::set_id(u_int8_t id){

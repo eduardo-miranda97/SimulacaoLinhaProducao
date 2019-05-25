@@ -1,25 +1,30 @@
 #ifndef ESPEC
 #define  ESPEC
 
+#ifndef ERRO_MEMORY_ACESS
+#define  ERRO_MEMORY_ACESS        2
+#endif
+
+#include <iostream>
 #include <cstdlib>
 
+
 class Especialista;
-extern u_int8_t      SM_quatd_Esp;
-extern Especialista* SM_Especialista;
-extern u_int16_t     last_id_espec;
+extern u_int8_t       SM_quatd_Esp;
+extern Especialista** SM_Especialista;
+extern u_int16_t      last_id_espec;
 
 enum state_esp{
     OCIOSITY_ESP=0, ACTIVE_ESP
 };
 
-Especialista*    GET_ESP_FREE();
-bool             ESP_FREE();
-
 class Especialista{
   public:
-    /* CONSTRUCTOR*/
-    Especialista(u_int8_t  id, state_esp situation,
-                u_int32_t time_ociosity, u_int32_t start_ociosity);
+    /* CONSTRUCTOR AND FUNCTIONS*/
+    Especialista();
+    static bool is_free();
+    static Especialista* get_free();
+    static void add_esp(Especialista* especialista);
     /* SET METHODS */
     void      set_id(u_int8_t id);
     void      set_situation(state_esp situation);
