@@ -5,7 +5,7 @@
  u_int16_t      last_id_espec   = 0;
 
 /* STATIC METHODS */
-void Especialista::add_esp(Especialista* especialista){
+void Especialista::add_esp(){
     if (!SM_Especialista){
         SM_Especialista    = (Especialista**) malloc(sizeof(Especialista*));
         if (!SM_Especialista){
@@ -15,7 +15,7 @@ void Especialista::add_esp(Especialista* especialista){
             exit(ERRO_MEMORY_ACESS);
         }
         SM_quatd_Esp  = 1;
-        SM_Especialista[0] = especialista;
+        SM_Especialista[0] = this;
         return;
     }
     SM_Especialista = (Especialista**) realloc(SM_Especialista, sizeof(Especialista*)*(++SM_quatd_Esp));
@@ -25,7 +25,7 @@ void Especialista::add_esp(Especialista* especialista){
         printf("\n================================================================================\n");
         exit(ERRO_MEMORY_ACESS);
     }
-    SM_Especialista[SM_quatd_Esp-1] = especialista;
+    SM_Especialista[SM_quatd_Esp-1] = this;
 }
 
 bool Especialista::is_free(){

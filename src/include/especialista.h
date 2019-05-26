@@ -22,9 +22,9 @@ class Especialista{
   public:
     /* CONSTRUCTOR AND FUNCTIONS*/
     Especialista();
-    static bool is_free();
+    static bool          is_free();
     static Especialista* get_free();
-    static void add_esp(Especialista* especialista);
+    void                 add_esp();
     /* SET METHODS */
     void      set_id(u_int8_t id);
     void      set_situation(state_esp situation);
