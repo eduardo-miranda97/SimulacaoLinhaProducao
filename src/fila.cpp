@@ -22,15 +22,10 @@ Vaso* pop_vaso_fila(u_int8_t fila){
       if (!SM_queue_vasos[fila]){
           return NULL;
       }
-      u_int16_t pos = 0;
-      Vaso*     aux = SM_queue_vasos[fila][pos];
-      for (u_int16_t i=1; i < SM_length_queue_vasos[fila]; i++)
-          if (SM_queue_vasos[fila][i]->get_queue(fila) > aux->get_queue(fila)){
-              aux = SM_queue_vasos[fila][i];
-              pos = i;
-          }
-      if (pos != SM_length_queue_vasos[fila]-1){
-          SM_queue_vasos[fila][pos] = SM_queue_vasos[fila][SM_length_queue_vasos[fila]-1];
+      Vaso* aux = SM_queue_vasos[fila][0];
+      if (SM_length_queue_vasos[fila]-1){
+          for (u_int16_t i=0; i < (SM_length_queue_vasos[fila]-1); i++)
+              SM_queue_vasos[fila][i] = SM_queue_vasos[fila][(i+1)];
       }
       SM_queue_vasos[fila] = (Vaso**) realloc(SM_queue_vasos[fila], sizeof(Vaso*)*(--(SM_length_queue_vasos[fila])));
       if ((!SM_queue_vasos[fila])&&(SM_length_queue_vasos[fila])){
@@ -39,5 +34,5 @@ Vaso* pop_vaso_fila(u_int8_t fila){
            printf("\n================================================================================\n");
            exit(ERRO_MEMORY_ACESS);
      }
-      return aux;
+     return aux;
 }
