@@ -6,7 +6,7 @@ u_int16_t last_id_arts = 0;
 
 
 /* STATIC METHODS */
-void Artesao::add_art(Artesao* artesao){
+void Artesao::add_art(){
     if (!SM_Artesao){
         SM_Artesao    = (Artesao**) malloc(sizeof(Artesao*));
         if (!SM_Artesao){
@@ -16,7 +16,7 @@ void Artesao::add_art(Artesao* artesao){
             exit(ERRO_MEMORY_ACESS);
         }
         SM_quatd_Art  = 1;
-        SM_Artesao[0] = artesao;
+        SM_Artesao[0] = this;
         return;
     }
     SM_Artesao = (Artesao**) realloc(SM_Artesao, sizeof(Artesao*)*(++SM_quatd_Art));
@@ -26,7 +26,7 @@ void Artesao::add_art(Artesao* artesao){
         printf("\n================================================================================\n");
         exit(ERRO_MEMORY_ACESS);
     }
-    SM_Artesao[SM_quatd_Art-1] = artesao;
+    SM_Artesao[SM_quatd_Art-1] = this;
 }
 
 bool Artesao::is_free(){

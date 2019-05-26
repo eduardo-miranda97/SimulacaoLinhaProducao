@@ -23,8 +23,8 @@ class Artesao{
     /* CONSTRUCTOR */
     Artesao();
     static bool     is_free();
-    static void     add_art(Artesao* artesao);
     static Artesao* get_free();
+    void            add_art();
     /* SET METHODS */
     void      set_id(u_int8_t id);
     void      set_situation(state_art situation);
