@@ -6,6 +6,7 @@
 
 #define ERRO_ARRAY_ACESS        1
 #define ERRO_MEMORY_ACESS       2
+#define ERRO_EXEC               3
 /* #define  ERRO_CALC          7 in triangular.h */
 
 #define QUEUE_WAIT              6
@@ -24,7 +25,7 @@ extern Vaso***     SM_queue_vasos;
 extern u_int16_t   SM_length_queue_vasos[QUEUE_WAIT];
 
 enum name_queue{
-    PREPARA_BASE=0 , LIMP_ACAB_BASE, PREP_BOCA,  LIMP_ACAB_BOCA, IMP_INTER,
+    PREPARA_FORM=0 , LIMP_ACAB_BASE, PREP_BOCA,  LIMP_ACAB_BOCA, IMP_INTER,
     ENV_GERAL,
 };
 
@@ -41,7 +42,7 @@ class Vaso{
     static float prob_medium;
     static float prob_big;
     /* CONSTRUCTOR AND FUNCTIONS*/
-    Vaso(u_int32_t id, u_int32_t start_time);
+    Vaso(u_int32_t start_time);
     static u_int8_t rand_type();
     /* SETS METHODS */
     void       set_id(u_int32_t id);

@@ -12,9 +12,8 @@ u_int8_t rand_type();
 
 
 /* CONSTRUCTOR AND FUNCTIONS*/
-Vaso::Vaso(u_int32_t id, u_int32_t start_time){
-    this->id         = id;
-    this->type       = type;
+Vaso::Vaso(u_int32_t start_time){
+    this->id         = last_id_vaso++;
     this->start_time = start_time;
     this->end_time   = 0;
     this->type       = Vaso::rand_type();
