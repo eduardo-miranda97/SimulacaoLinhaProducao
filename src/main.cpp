@@ -9,11 +9,11 @@ int main(int argc, char* argv[]){
 
     Artesao a0;
     Artesao a1;
-    Artesao::add_art(&a0);
-    Artesao::add_art(&a1);
+    a0.add_art();
+    a1.add_art();
 
     Especialista e0;
-    Especialista::add_esp(&e0);
+    e0.add_esp();
 
     init_simulation();
     while(SM_list_event_simulation){
