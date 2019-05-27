@@ -36,11 +36,11 @@ void mouth_set_drying();   // EVENTO  := 'SECAGEM_ACABAMENTO_BOCA'
 
 void mount_clearing();     // EVENTO  := 'LIMPEZA_ACABAMENTO_BOCA'
 
-void mount_drying();
+void mount_drying();       // EVENTO  := 'SECAGEM_DA_BOCA'
 
-void inter_waterpoofing();
+void inter_waterpoofing();  // EVENTO  := 'IMPERMEABILIZIÇÃO_INTERNA'
 
-void inter_drying();
+void inter_drying();       // EVENTO  := 'ENVERNIZAÇÃO_GERAL'
 
 void varnishing();
 
