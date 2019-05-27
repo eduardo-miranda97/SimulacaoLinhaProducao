@@ -24,17 +24,17 @@ void base_set_init();       // EVENTO := 'ACABAMENTO_INCIAL_BASE'
 //
 void base_set_drying();    // EVENTO  := 'SECAGEM_ACABAMENTO_BASE'
 //
-void base_clearing();
+void base_clearing();      // EVENTO  := 'LIMPEZA_ACABAMENTO_BASE'
 
-void base_finish();
+void base_finish();         // EVENTO  := 'SECAGEM_DA_BASE'
 
-void mouth_preparation();
+void mouth_preparation();  // EVENTO  := 'PREPARA_BOCA'
 
-void mouth_set_init();
+void mouth_set_init();     // EVENTO  := 'ACABAMENTO_INCIAL_BOCA'
 
-void mouth_set_drying();
+void mouth_set_drying();   // EVENTO  := 'SECAGEM_ACABAMENTO_BOCA'
 
-void mount_clearing();
+void mount_clearing();     // EVENTO  := 'LIMPEZA_ACABAMENTO_BOCA'
 
 void mount_drying();
 
