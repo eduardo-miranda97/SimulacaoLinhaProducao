@@ -17,7 +17,6 @@ void init_simulation(){
         event.uses.vaso   = NULL;
         event.uses.art    = NULL;
         event.uses.esp    = NULL;
-        printf("Agenda CHEGADA PEDIDO  Time: %lf\n", start_time);
         insert_list_event(event);
         u_int8_t quatd_pedidos = trand(times);
         start_time            += (quatd_pedidos*DAYINMINUTES);
@@ -25,13 +24,11 @@ void init_simulation(){
 }
 
 void begin_requets(){
-      printf("CHEGADA PEDIDO  Time: %lf\n", SM_list_event_simulation[0].event.time_event);
       SM_time_simulation = SM_list_event_simulation[0].event.time_event;
       remove_list_event(&(SM_list_event_simulation[0]));
       u_int16_t quatd_vasos = trand(SM_quatd_vasos);
       for (u_int16_t i=0; i < quatd_vasos; i++){
           Vaso* vaso = new Vaso(SM_time_simulation);
-          printf("Instanciado vaso ID: %ld\n", vaso->get_id());
           if (!vaso){
               printf("\n================================================================================\n");
               printf("\n[ERRO] falha na alocação de memoria em begin_requets()\n\n");
@@ -62,7 +59,6 @@ void begin_requets(){
 
                       if (Artesao::is_free()){
                           Artesao* artesao = Artesao::get_free();
-                          printf("Agendando PREPARA_FORM vaso ID: %ld com artesao ID: %d\n", vaso->get_id(), artesao->get_id());
                           artesao->set_situation(state_art::ACTIVE_ART);
                           artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
                           new_event.time_event  = (SM_time_simulation+trand(times));
@@ -72,7 +68,6 @@ void begin_requets(){
                           new_event.uses.esp    = NULL;
                       }else{
                           Especialista* especialista = Especialista::get_free();
-                          printf("Agendando PREPARA_FORM vaso ID: %ld com Especialista ID: %d\n", vaso->get_id(), especialista->get_id());
                           especialista->set_situation(state_esp::ACTIVE_ESP);
                           especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
                           new_event.time_event  = (SM_time_simulation+trand(times));
@@ -84,24 +79,17 @@ void begin_requets(){
                       insert_list_event(new_event);
                       continue;
                 }
-          printf("coloca na fila PREPARA_FORM vaso  ID: %ld\n", vaso->get_id());
           vaso->set_queue(SM_time_simulation, PREPARA_FORM);
           put_vaso_fila(vaso, PREPARA_FORM);
       }
 }
 
 void form_preparation(){
-    times_triangular_t times;
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    printf("FIM PREPARA_FORM vaso: ID %ld ", new_event.uses.vaso->get_id());
-    if (new_event.uses.art){
-       printf(" artesao ID: %d  Time: %lf\n", new_event.uses.art->get_id(), new_event.time_event);
-    }else{
-       printf(" especialista ID: %d  Time: %lf\n", new_event.uses.esp->get_id(), new_event.time_event);
-    }
+    times_triangular_t times;
     if (new_event.uses.vaso->get_type() == SMALL){
         times.time_min  = 1;
         times.time_mode = 2;
@@ -115,13 +103,7 @@ void form_preparation(){
         times.time_mode = 6;
         times.time_max  = 8;
     }
-    /* TESTES*/
-    // if (new_event.uses.art){
-    //     new_event.uses.art->set_situation(OCIOSITY_ART);
-    // }else{
-    //     new_event.uses.esp->set_situation(OCIOSITY_ESP);
-    // }
-    /* FIM testes*/
+
     new_event.time_event += trand(times);
     new_event.funct_event = &base_preparation;
     insert_list_event(new_event);
@@ -130,7 +112,6 @@ void form_preparation(){
 void base_preparation(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
-    printf("PREPARA_BASE vaso: ID %d\n", new_event.uses.vaso->get_id());
     remove_list_event(&(SM_list_event_simulation[0]));
 
     times_triangular_t times;
@@ -157,7 +138,6 @@ void base_preparation(){
 void base_set_init(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
-    printf("ACABAMENTO INICIAL BASE vaso: ID %d\n", new_event.uses.vaso->get_id());
     remove_list_event(&(SM_list_event_simulation[0]));
 
     times_triangular_t times;
@@ -373,7 +353,6 @@ SEC_ACAB_BASE_LABEL:
 void base_set_drying(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
-    printf("SECAGEM ACABAMENTO BASE vaso: ID %d\n", new_event.uses.vaso->get_id());
     remove_list_event(&(SM_list_event_simulation[0]));
 
     times_triangular_t times;
@@ -428,7 +407,6 @@ void base_set_drying(){
 void base_clearing(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
-    printf("LIMPEZA_ACABAMENTO_BASE vaso: ID %d\n", new_event.uses.vaso->get_id());
     remove_list_event(&(SM_list_event_simulation[0]));
 
     times_triangular_t times;
@@ -1394,20 +1372,239 @@ void inter_drying(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
+    times_triangular_t times;
+    if (Artesao::is_free()){
+        Artesao* artesao  = Artesao::get_free();
+        artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
+        if (new_event.uses.vaso->get_type() == SMALL){
+            times.time_min  = 2;
+            times.time_mode = 5;
+            times.time_max  = 8;
+        }else if (new_event.uses.vaso->get_type() == MEDIUM){
+            times.time_min  = 5;
+            times.time_mode = 8;
+            times.time_max  = 11;
+        }else{
+            times.time_min  = 8;
+            times.time_mode = 11;
+            times.time_max  = 14;
+        }
+        new_event.time_event += trand(times);
+        new_event.funct_event = &varnishing;
+        new_event.uses.art    = artesao;
+        insert_list_event(new_event);
+        return;
+    }
+    new_event.uses.vaso->set_queue(SM_time_simulation, ENV_GERAL);
+    put_vaso_fila(new_event.uses.vaso, ENV_GERAL);
 }
 
 void varnishing(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
+
+    times_triangular_t times;
+    bool flag = true;
+    if (SM_massa <= PORC_NIVEL_MASSA){
+        flag = false;
+        event_t prep_massa = new_event;
+        /* Tempo para fazer massa */
+        times.time_min  = 10;
+        times.time_mode = 20;
+        times.time_max  = 30;
+        prep_massa.time_event += trand(times);
+        prep_massa.funct_event = &preparation_massa;
+        prep_massa.uses.vaso   = NULL;
+        insert_list_event(prep_massa);
+
+    }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+        flag = false;
+        event_t prep_pedra = new_event;
+        /* Tempo para fazer pedras*/
+        times.time_min  = 10;
+        times.time_mode = 20;
+        times.time_max  = 30;
+        prep_pedra.time_event += trand(times);
+        prep_pedra.funct_event = &preparation_pedras;
+        prep_pedra.uses.vaso   = NULL;
+        insert_list_event(prep_pedra);
+
+    }else if (SM_queue_vasos[ENV_GERAL]){
+        flag = false;
+        event_t fila_env_geral = new_event;
+        Vaso* vaso = pop_vaso_fila(ENV_GERAL);
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+        if (vaso->get_type() == SMALL){
+            times.time_min  = 2;
+            times.time_mode = 7;
+            times.time_max  = 12;
+        }else if (vaso->get_type() == MEDIUM){
+            times.time_min  = 5;
+            times.time_mode = 10;
+            times.time_max  = 15;
+        }else{
+            times.time_min  = 9;
+            times.time_mode = 14;
+            times.time_max  = 19;
+        }
+
+        fila_env_geral.time_event += trand(times);
+        fila_env_geral.funct_event = &varnishing;
+        fila_env_geral.uses.vaso   = vaso;
+        insert_list_event(fila_env_geral);
+
+    }else if (SM_queue_vasos[IMP_INTER]){
+        flag = false;
+        event_t fila_imp_inter = new_event;
+        Vaso* vaso = pop_vaso_fila(IMP_INTER);
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+        if (vaso->get_type() == SMALL){
+            times.time_min  = 2;
+            times.time_mode = 5;
+            times.time_max  = 8;
+        }else if (vaso->get_type() == MEDIUM){
+            times.time_min  = 5;
+            times.time_mode = 8;
+            times.time_max  = 11;
+        }else{
+            times.time_min  = 8;
+            times.time_mode = 11;
+            times.time_max  = 14;
+        }
+
+        fila_imp_inter.time_event += trand(times);
+        fila_imp_inter.funct_event = &inter_waterpoofing;
+        fila_imp_inter.uses.vaso   = vaso;
+        insert_list_event(fila_imp_inter);
+
+    }else if (SM_queue_vasos[LIMP_ACAB_BOCA]){
+        flag = false;
+        event_t fila_limp_acab_boca = new_event;
+        Vaso* vaso = pop_vaso_fila(LIMP_ACAB_BOCA);
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+        if (vaso->get_type() == SMALL){
+            times.time_min  = 1;
+            times.time_mode = 2;
+            times.time_max  = 3;
+        }else if (vaso->get_type() == MEDIUM){
+            times.time_min  = 2;
+            times.time_mode = 4;
+            times.time_max  = 6;
+        }else{
+            times.time_min  = 4;
+            times.time_mode = 6;
+            times.time_max  = 8;
+        }
+
+        fila_limp_acab_boca.time_event += trand(times);
+        fila_limp_acab_boca.funct_event = &mount_clearing;
+        fila_limp_acab_boca.uses.vaso   = vaso;
+        insert_list_event(fila_limp_acab_boca);
+
+    }else if (SM_queue_vasos[PREP_BOCA]){
+        flag = false;
+        event_t fila_prep_boca = new_event;
+        Vaso* vaso = pop_vaso_fila(PREP_BOCA);
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+        if (vaso->get_type() == SMALL){
+            times.time_min  = 1;
+            times.time_mode = 2;
+            times.time_max  = 3;
+        }else if (vaso->get_type() == MEDIUM){
+            times.time_min  = 2;
+            times.time_mode = 4;
+            times.time_max  = 6;
+        }else{
+            times.time_min  = 4;
+            times.time_mode = 6;
+            times.time_max  = 8;
+        }
+
+        fila_prep_boca.time_event += trand(times);
+        fila_prep_boca.funct_event = &mouth_preparation;
+        fila_prep_boca.uses.vaso   = vaso;
+        insert_list_event(fila_prep_boca);
+
+    }else if (SM_queue_vasos[PREPARA_FORM]){
+        flag = false;
+        event_t fila_prepara_form = new_event;
+        Vaso* vaso = pop_vaso_fila(PREPARA_FORM);
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+        if (vaso->get_type() == SMALL){
+            times.time_min  = 1;
+            times.time_mode = 2;
+            times.time_max  = 3;
+        }else if (vaso->get_type() == MEDIUM){
+            times.time_min  = 2;
+            times.time_mode = 4;
+            times.time_max  = 6;
+        }else{
+            times.time_min  = 4;
+            times.time_mode = 6;
+            times.time_max  = 8;
+        }
+
+        fila_prepara_form.time_event += trand(times);
+        fila_prepara_form.funct_event = &form_preparation;
+        fila_prepara_form.uses.vaso   = vaso;
+        insert_list_event(fila_prepara_form);
+
+    }
+
+    if (new_event.uses.vaso->get_type() == SMALL){
+        times.time_min  = 5;
+        times.time_mode = 7;
+        times.time_max  = 8;
+    }else if (new_event.uses.vaso->get_type() == MEDIUM){
+        times.time_min  = 7;
+        times.time_mode = 10;
+        times.time_max  = 13;
+    }else{
+        times.time_min  = 10;
+        times.time_mode = 14;
+        times.time_max  = 18;
+    }
+
+    if (flag){
+        new_event.uses.art->set_situation(state_art::OCIOSITY_ART);
+        new_event.uses.art->set_start_ociosity(SM_time_simulation);
+    }
+
+    new_event.time_event += trand(times);
+    new_event.funct_event = &final_drying;
+    new_event.uses.art    = NULL;
+    new_event.uses.esp    = NULL;
+    insert_list_event(new_event);
 }
 
 void final_drying(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
-}
 
+    SM_espaco_secagem++;
+    if (!SM_vaso_finish){
+        SM_vaso_finish = (Vaso**) malloc(sizeof(Vaso*));
+        if (!SM_vaso_finish){
+            printf("\n================================================================================\n");
+            printf("\n[ERRO] falha na alocação de memoria em final_drying()\n\n");
+            printf("\n================================================================================\n");
+            exit(ERRO_MEMORY_ACESS);
+        }
+        SM_vaso_finish_length = 1;
+        SM_vaso_finish[0] = new_event.uses.vaso;
+    }else{
+        SM_vaso_finish = (Vaso**) realloc(SM_vaso_finish, sizeof(Vaso*)*(++SM_vaso_finish_length));
+        if (!SM_vaso_finish){
+            printf("\n================================================================================\n");
+            printf("\n[ERRO] falha na alocação de memoria em final_drying()\n\n");
+            printf("\n================================================================================\n");
+            exit(ERRO_MEMORY_ACESS);
+        }
+        SM_vaso_finish[SM_vaso_finish_length-1] = new_event.uses.vaso;
+    }
+}
 
 void preparation_massa(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
