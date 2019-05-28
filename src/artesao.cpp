@@ -1,45 +1,26 @@
 #include "./include/artesao.h"
 
 u_int8_t  SM_quatd_Art = 0;
-Artesao** SM_Artesao   = NULL;
+std::list<Artesao*> SM_Artesao;
 u_int16_t last_id_arts = 0;
 
 
 /* STATIC METHODS */
 void Artesao::add_art(){
-    if (!SM_Artesao){
-        SM_Artesao    = (Artesao**) malloc(sizeof(Artesao*));
-        if (!SM_Artesao){
-            printf("\n================================================================================\n");
-            printf("\n[ERRO] falha na alocação de memoria em Vaso::add_art()\n\n");
-            printf("\n================================================================================\n");
-            exit(ERRO_MEMORY_ACESS);
-        }
-        SM_quatd_Art  = 1;
-        SM_Artesao[0] = this;
-        return;
-    }
-    SM_Artesao = (Artesao**) realloc(SM_Artesao, sizeof(Artesao*)*(++SM_quatd_Art));
-    if (!SM_Artesao){
-        printf("\n================================================================================\n");
-        printf("\n[ERRO] falha na alocação de memoria em Vaso::add_art()\n\n");
-        printf("\n================================================================================\n");
-        exit(ERRO_MEMORY_ACESS);
-    }
-    SM_Artesao[SM_quatd_Art-1] = this;
+    SM_Artesao.push_back(this);
 }
 
 bool Artesao::is_free(){
-    for (u_int8_t i=0; i < SM_quatd_Art; i++)
-        if (SM_Artesao[i]->get_situation() == OCIOSITY_ART)
+    for (Artesao* artesao : SM_Artesao)
+        if (artesao->get_situation() == OCIOSITY_ART)
             return true;
     return false;
 }
 
 Artesao* Artesao::get_free(){
-  for (u_int8_t i=0; i < SM_quatd_Art; i++)
-      if (SM_Artesao[i]->get_situation() == OCIOSITY_ART)
-          return SM_Artesao[i];
+    for (Artesao* artesao : SM_Artesao)
+      if (artesao->get_situation() == OCIOSITY_ART)
+          return artesao;
   return NULL;
 }
 

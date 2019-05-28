@@ -1,44 +1,24 @@
 #include "./include/especialista.h"
 
- u_int8_t       SM_quatd_Esp    = 0;
- Especialista** SM_Especialista = NULL;
- u_int16_t      last_id_espec   = 0;
+ std::list<Especialista*> SM_Especialista;
+ u_int16_t                last_id_espec   = 0;
 
 /* STATIC METHODS */
 void Especialista::add_esp(){
-    if (!SM_Especialista){
-        SM_Especialista    = (Especialista**) malloc(sizeof(Especialista*));
-        if (!SM_Especialista){
-            printf("\n================================================================================\n");
-            printf("\n[ERRO] falha na alocação de memoria em Especialista::add_esp()\n\n");
-            printf("\n================================================================================\n");
-            exit(ERRO_MEMORY_ACESS);
-        }
-        SM_quatd_Esp  = 1;
-        SM_Especialista[0] = this;
-        return;
-    }
-    SM_Especialista = (Especialista**) realloc(SM_Especialista, sizeof(Especialista*)*(++SM_quatd_Esp));
-    if (!SM_Especialista){
-        printf("\n================================================================================\n");
-        printf("\n[ERRO] falha na alocação de memoria em Especialista::add_esp()\n\n");
-        printf("\n================================================================================\n");
-        exit(ERRO_MEMORY_ACESS);
-    }
-    SM_Especialista[SM_quatd_Esp-1] = this;
+    SM_Especialista.push_back(this);
 }
 
 bool Especialista::is_free(){
-    for (u_int8_t i=0; i < SM_quatd_Esp; i++)
-        if (SM_Especialista[i]->get_situation() == OCIOSITY_ESP)
+    for (Especialista* especialista : SM_Especialista)
+        if (especialista->get_situation() == OCIOSITY_ESP)
            return true;
     return false;
 }
 
 Especialista* Especialista::get_free(){
-    for (u_int8_t i=0; i < SM_quatd_Esp; i++)
-        if (SM_Especialista[i]->get_situation() == OCIOSITY_ESP)
-           return SM_Especialista[i];
+    for (Especialista* especialista : SM_Especialista)
+        if (especialista->get_situation() == OCIOSITY_ESP)
+           return especialista;
     return NULL;
 }
 

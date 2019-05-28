@@ -5,14 +5,15 @@
 #define  ERRO_MEMORY_ACESS        2
 #endif
 
+class Especialista;
+
 #include <iostream>
 #include <cstdlib>
+#include <list>
 
 
-class Especialista;
-extern u_int8_t       SM_quatd_Esp;
-extern Especialista** SM_Especialista;
-extern u_int16_t      last_id_espec;
+extern std::list<Especialista*> SM_Especialista;
+extern u_int16_t           last_id_espec;
 
 enum state_esp{
     OCIOSITY_ESP=0, ACTIVE_ESP

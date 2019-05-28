@@ -1,5 +1,6 @@
 #ifndef ARTES
 #define  ARTES
+class Artesao;
 
 #ifndef ERRO_MEMORY_ACESS
 #define  ERRO_MEMORY_ACESS        2
@@ -7,11 +8,10 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <list>
 
 
-class Artesao;
-extern u_int8_t   SM_quatd_Art;
-extern Artesao**  SM_Artesao;
+extern std::list<Artesao*> SM_Artesao;
 extern u_int16_t  last_id_arts;
 
 enum state_art{
