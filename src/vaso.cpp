@@ -5,11 +5,7 @@
 float Vaso::prob_small   = 0.3;
 float Vaso::prob_medium  = 0.3;
 float Vaso::prob_big     = 0.4;
-Vaso*** SM_queue_vasos  = NULL;
-u_int16_t SM_length_queue_vasos[QUEUE_WAIT];
-
-u_int8_t rand_type();
-
+std::list<Vaso*>  SM_queue_vasos[QUEUE_WAIT];
 
 /* CONSTRUCTOR AND FUNCTIONS*/
 Vaso::Vaso(u_int32_t start_time){

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <list>
 
 #define ERRO_ARRAY_ACESS        1
 #define ERRO_MEMORY_ACESS       2
@@ -21,8 +22,7 @@
 
 
 class Vaso;
-extern Vaso***     SM_queue_vasos;
-extern u_int16_t   SM_length_queue_vasos[QUEUE_WAIT];
+extern std::list<Vaso*>  SM_queue_vasos[QUEUE_WAIT];
 
 enum name_queue{
     PREPARA_FORM=0 , LIMP_ACAB_BASE, PREP_BOCA,  LIMP_ACAB_BOCA, IMP_INTER,
