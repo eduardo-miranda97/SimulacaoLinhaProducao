@@ -1,6 +1,9 @@
 #include <time.h>
 #include "./include/atividade.h"
 #include <list>
+#include <vector>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -39,6 +42,6 @@ int main(int argc, char* argv[]){
     for (Vaso* vaso: SM_vaso_finish){
         printf("Vaso ID: %ld\n", vaso->get_id());
     }
-    printf("\nUltimo ID vaso: %ld\n", last_id_vaso);
+    printf("\nUltimo ID vaso: %ld\n", last_id_vaso-1);
     return 0;
 }
