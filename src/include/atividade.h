@@ -1,17 +1,18 @@
 #ifndef ACT
 #define  ACT
 
+#include <list>
 #include "vaso.h"
 #include "especialista.h"
+#include "atividade.h"
 #include "artesao.h"
 #include "triangular.h"
 #include "simulacao.h"
 #include "TAD.h"
-#include "fila.h"
+// #include "fila.h"
+
 
 // SET == ACABAMENTO CARALHO.
-
-
 void init_simulation();
 
 void begin_requets();       // EVENTO := 'CHEGADA DE PEDIDOS'
