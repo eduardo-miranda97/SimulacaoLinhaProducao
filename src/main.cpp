@@ -1,9 +1,12 @@
 #include <time.h>
-#include "./include/fila.h"
+#include "./include/atividade.h"
+#include <list>
+
+using namespace std;
 
 int main(int argc, char* argv[]){
     srand(time(NULL));
-    SM_queue_vasos = (Vaso***) malloc(sizeof(Vaso**)*QUEUE_WAIT);
+
     SM_time_simulation = 0;
     SM_final_time_simulation = 78*24*60;
 
@@ -33,8 +36,8 @@ int main(int argc, char* argv[]){
         act.event.funct_event();
     }
 
-    for (int i=0; i < SM_vaso_finish_length; i++){
-      printf("Vaso ID: %ld\n", SM_vaso_finish[i]->get_id());
+    for (Vaso* vaso: SM_vaso_finish){
+        printf("Vaso ID: %ld\n", vaso->get_id());
     }
     printf("\nUltimo ID vaso: %ld\n", last_id_vaso);
     return 0;

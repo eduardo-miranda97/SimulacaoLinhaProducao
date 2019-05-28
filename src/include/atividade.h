@@ -9,7 +9,6 @@
 #include "triangular.h"
 #include "simulacao.h"
 #include "TAD.h"
-// #include "fila.h"
 
 
 // SET == ACABAMENTO CARALHO.
