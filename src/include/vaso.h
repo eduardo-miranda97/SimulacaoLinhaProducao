@@ -8,6 +8,8 @@
 #define ERRO_ARRAY_ACESS        1
 #define ERRO_MEMORY_ACESS       2
 #define ERRO_EXEC               3
+#define ERRO_INPUT_ARGS         4
+#define ERRO_INPUT_FILE         5
 /* #define  ERRO_CALC          7 in triangular.h */
 
 #define QUEUE_WAIT              6
@@ -15,6 +17,10 @@
 #define MASSA_SMALL             1
 #define MASSA_MEDIAM            2
 #define MASSA_BIG               4
+
+#define PEDRA_SMALL             1
+#define PEDRA_MEDIAM            2
+#define PEDRA_BIG               4
 
 #define SPACE_SMALL             1
 #define SPACE_MEDIAM            2
@@ -55,6 +61,7 @@ class Vaso{
     u_int32_t  get_id();
     u_int8_t   get_type();
     u_int8_t   get_quatd_massa();
+    u_int8_t   get_quatd_pedra();
     u_int8_t   get_quatd_espace();
     u_int32_t  get_start_time();
     u_int32_t  get_end_time();

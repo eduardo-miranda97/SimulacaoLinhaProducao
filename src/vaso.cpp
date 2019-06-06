@@ -73,6 +73,18 @@ u_int8_t Vaso::get_quatd_massa(){
         return MASSA_BIG;
     return MASSA_BIG;  //somente para não da warning, não é necessario.
 }
+
+u_int8_t   Vaso::get_quatd_pedra(){
+    if (this->type == SMALL)
+        return PEDRA_SMALL;
+    if (this->type == MEDIUM)
+        return PEDRA_MEDIAM;
+    if (this->type == BIG)
+        return PEDRA_BIG;
+    return PEDRA_BIG;  //somente para não da warning, não é necessario.
+}
+
+
 u_int32_t  Vaso::get_start_time(){
     return this->start_time;
 }
