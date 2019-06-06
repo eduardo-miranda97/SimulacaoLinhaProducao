@@ -2,13 +2,7 @@
 
 #define DAYINMINUTES             (24*60)
 
-#define NUM_PEDIDOS                   30
-#define VAR_PEDIDOS                    7
 void init_simulation(){
-    times_triangular_t times;
-    times.time_min    = (NUM_PEDIDOS-VAR_PEDIDOS);
-    times.time_mode   = NUM_PEDIDOS;
-    times.time_max    = (NUM_PEDIDOS+VAR_PEDIDOS);
     double start_time = 0;
     event_t event;
     do{
@@ -18,7 +12,7 @@ void init_simulation(){
         event.uses.art    = NULL;
         event.uses.esp    = NULL;
         insert_list_event(event);
-        u_int8_t quatd_pedidos = trand(times);
+        u_int8_t quatd_pedidos = trand(SM_quatd_pedidos);
         start_time            += (quatd_pedidos*DAYINMINUTES);
     }while(start_time < SM_final_time_simulation);
 }
@@ -26,7 +20,6 @@ void init_simulation(){
 void begin_requets(){
       SM_time_simulation = SM_list_event_simulation[0].event.time_event;
       remove_list_event(&(SM_list_event_simulation[0]));
-
       u_int16_t quatd_vasos = trand(SM_quatd_vasos);
       for (u_int16_t i=0; i < quatd_vasos; i++){
           Vaso* vaso = new Vaso(SM_time_simulation);
@@ -42,40 +35,32 @@ void begin_requets(){
                       SM_massa          -= vaso->get_quatd_massa();
                       SM_espaco_secagem -= vaso->get_quatd_espace();
 
-                      times_triangular_t times;
                       event_t new_event;
                       if (vaso->get_type() == SMALL){
-                          times.time_min  = 1;
-                          times.time_mode = 2;
-                          times.time_max  = 3;
+                          new_event.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-s"]));
                       }else if (vaso->get_type() == MEDIUM){
-                          times.time_min  = 2;
-                          times.time_mode = 4;
-                          times.time_max  = 6;
+                          new_event.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-m"]));
                       }else{
-                          times.time_min  = 4;
-                          times.time_mode = 6;
-                          times.time_max  = 8;
+                          new_event.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-b"]));
                       }
 
-                      if (Artesao::is_free()){
-                          Artesao* artesao = Artesao::get_free();
-                          artesao->set_situation(state_art::ACTIVE_ART);
-                          artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
-                          new_event.time_event  = (SM_time_simulation+trand(times));
-                          new_event.funct_event = &form_preparation;
-                          new_event.uses.vaso   = vaso;
-                          new_event.uses.art    = artesao;
-                          new_event.uses.esp    = NULL;
-                      }else{
+                      if (Especialista::is_free()){
                           Especialista* especialista = Especialista::get_free();
                           especialista->set_situation(state_esp::ACTIVE_ESP);
                           especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
-                          new_event.time_event  = (SM_time_simulation+trand(times));
+
                           new_event.funct_event = &form_preparation;
                           new_event.uses.vaso   = vaso;
                           new_event.uses.art    = NULL;
                           new_event.uses.esp    = especialista;
+                      }else{
+                          Artesao* artesao = Artesao::get_free();
+                          artesao->set_situation(state_art::ACTIVE_ART);
+                          artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
+                          new_event.funct_event = &form_preparation;
+                          new_event.uses.vaso   = vaso;
+                          new_event.uses.art    = artesao;
+                          new_event.uses.esp    = NULL;
                       }
                       insert_list_event(new_event);
                       continue;
@@ -90,22 +75,14 @@ void form_preparation(){
     event_t new_event = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    times_triangular_t times;
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 1;
-        times.time_mode = 2;
-        times.time_max  = 4;
+        new_event.time_event  += trand(SM_times_events["prep_base-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 2;
-        times.time_mode = 4;
-        times.time_max  = 6;
+        new_event.time_event  += trand(SM_times_events["prep_base-m"]);
     }else{
-        times.time_min  = 4;
-        times.time_mode = 6;
-        times.time_max  = 8;
+        new_event.time_event  += trand(SM_times_events["prep_base-b"]);
     }
 
-    new_event.time_event += trand(times);
     new_event.funct_event = &base_preparation;
     insert_list_event(new_event);
 }
@@ -115,21 +92,14 @@ void base_preparation(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    times_triangular_t times;
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 10;
-        times.time_mode = 15;
-        times.time_max  = 20;
+        new_event.time_event  += trand(SM_times_events["acab_ini_base-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 30;
-        times.time_mode = 40;
-        times.time_max  = 50;
+        new_event.time_event  += trand(SM_times_events["acab_ini_base-m"]);
     }else{
-        times.time_min  = 100;
-        times.time_mode = 120;
-        times.time_max  = 140;
+        new_event.time_event  += trand(SM_times_events["acab_ini_base-b"]);
     }
-    new_event.time_event += trand(times);
+
     new_event.funct_event = &base_set_init;
     insert_list_event(new_event);
 }
@@ -176,21 +146,15 @@ void base_set_init(){
             Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
             SM_queue_vasos[ENV_GERAL].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 5;
-                times.time_mode = 10;
-                times.time_max  = 15;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 13;
-                times.time_mode = 18;
-                times.time_max  = 23;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
             }else{
-                times.time_min  = 20;
-                times.time_mode = 25;
-                times.time_max  = 30;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
             }
 
-            fila_env_geral.time_event += trand(times);
             fila_env_geral.funct_event = &varnishing;
             fila_env_geral.uses.vaso   = vaso;
             insert_list_event(fila_env_geral);
@@ -202,21 +166,15 @@ void base_set_init(){
             Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
             SM_queue_vasos[IMP_INTER].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 1;
-                times.time_mode = 3;
-                times.time_max  = 5;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 3;
-                times.time_mode = 5;
-                times.time_max  = 7;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
             }else{
-                times.time_min  = 5;
-                times.time_mode = 8;
-                times.time_max  = 11;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
             }
 
-            fila_imp_inter.time_event += trand(times);
             fila_imp_inter.funct_event = &inter_waterpoofing;
             fila_imp_inter.uses.vaso   = vaso;
             insert_list_event(fila_imp_inter);
@@ -227,21 +185,15 @@ void base_set_init(){
             Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
             SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 3;
-                times.time_mode = 6;
-                times.time_max  = 9;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 4;
-                times.time_mode = 7;
-                times.time_max  = 10;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
             }else{
-                times.time_min  = 5;
-                times.time_mode = 10;
-                times.time_max  = 15;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
             }
 
-            fila_limp_acab_boca.time_event += trand(times);
             fila_limp_acab_boca.funct_event = &mount_clearing;
             fila_limp_acab_boca.uses.vaso   = vaso;
             insert_list_event(fila_limp_acab_boca);
@@ -254,21 +206,15 @@ void base_set_init(){
         Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
         SM_queue_vasos[PREP_BOCA].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 7;
-            times.time_max  = 12;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 10;
-            times.time_max  = 15;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
         }else{
-            times.time_min  = 9;
-            times.time_mode = 14;
-            times.time_max  = 19;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
         }
 
-        fila_prep_boca.time_event += trand(times);
         fila_prep_boca.funct_event = &mouth_preparation;
         fila_prep_boca.uses.vaso   = vaso;
         insert_list_event(fila_prep_boca);
@@ -279,50 +225,40 @@ void base_set_init(){
         Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BASE].front();
         SM_queue_vasos[LIMP_ACAB_BASE].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BASE)), LIMP_ACAB_BASE);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
         }
 
-        fila_limp_acab_base.time_event += trand(times);
         fila_limp_acab_base.funct_event = &base_clearing;
         fila_limp_acab_base.uses.vaso   = vaso;
         insert_list_event(fila_limp_acab_base);
 
     }else if (SM_queue_vasos[PREPARA_FORM].size()){
       Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
-      if (SM_massa >= vaso->get_quatd_massa())
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
         if (SM_espaco_secagem >= vaso->get_quatd_espace()){
           SM_espaco_secagem -= vaso->get_quatd_espace();
           SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
           flag = false;
           event_t fila_prepara_form = new_event;
           SM_queue_vasos[PREPARA_FORM].pop_front();
           vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
           if (vaso->get_type() == SMALL){
-              times.time_min  = 1;
-              times.time_mode = 2;
-              times.time_max  = 3;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
           }else if (vaso->get_type() == MEDIUM){
-              times.time_min  = 2;
-              times.time_mode = 4;
-              times.time_max  = 6;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
           }else{
-              times.time_min  = 4;
-              times.time_mode = 6;
-              times.time_max  = 8;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
           }
 
-          fila_prepara_form.time_event += trand(times);
           fila_prepara_form.funct_event = &form_preparation;
           fila_prepara_form.uses.vaso   = vaso;
           insert_list_event(fila_prepara_form);
@@ -332,17 +268,11 @@ void base_set_init(){
 SEC_ACAB_BASE_LABEL:
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 5;
-        times.time_mode = 7;
-        times.time_max  = 8;
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 7;
-        times.time_mode = 10;
-        times.time_max  = 13;
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-m"]);
     }else{
-        times.time_min  = 10;
-        times.time_mode = 14;
-        times.time_max  = 18;
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-b"]);
     }
 
     if (flag){
@@ -355,7 +285,6 @@ SEC_ACAB_BASE_LABEL:
         }
     }
 
-    new_event.time_event += trand(times);
     new_event.funct_event = &base_set_drying;
     new_event.uses.art    = NULL;
     new_event.uses.esp    = NULL;
@@ -367,24 +296,18 @@ void base_set_drying(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    times_triangular_t times;
+
+    if (new_event.uses.vaso->get_type() == SMALL){
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-s"]);
+    }else if (new_event.uses.vaso->get_type() == MEDIUM){
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-m"]);
+    }else{
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-b"]);
+    }
     if (Especialista::is_free()){
         Especialista* especialista  = Especialista::get_free();
         especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
-        if (new_event.uses.vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
-        }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
-        }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
-        }
-        new_event.time_event += trand(times);
+
         new_event.funct_event = &base_clearing;
         new_event.uses.esp    = especialista;
         insert_list_event(new_event);
@@ -393,20 +316,7 @@ void base_set_drying(){
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
-        if (new_event.uses.vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
-        }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
-        }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
-        }
-        new_event.time_event += trand(times);
+
         new_event.funct_event = &base_clearing;
         new_event.uses.art    = artesao;
         insert_list_event(new_event);
@@ -456,21 +366,15 @@ void base_clearing(){
             Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
             SM_queue_vasos[ENV_GERAL].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 5;
-                times.time_mode = 10;
-                times.time_max  = 15;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 13;
-                times.time_mode = 18;
-                times.time_max  = 23;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
             }else{
-                times.time_min  = 20;
-                times.time_mode = 25;
-                times.time_max  = 30;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
             }
 
-            fila_env_geral.time_event += trand(times);
             fila_env_geral.funct_event = &varnishing;
             fila_env_geral.uses.vaso   = vaso;
             insert_list_event(fila_env_geral);
@@ -482,21 +386,15 @@ void base_clearing(){
             Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
             SM_queue_vasos[IMP_INTER].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 1;
-                times.time_mode = 3;
-                times.time_max  = 5;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 3;
-                times.time_mode = 5;
-                times.time_max  = 7;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
             }else{
-                times.time_min  = 5;
-                times.time_mode = 8;
-                times.time_max  = 11;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
             }
 
-            fila_imp_inter.time_event += trand(times);
             fila_imp_inter.funct_event = &inter_waterpoofing;
             fila_imp_inter.uses.vaso   = vaso;
             insert_list_event(fila_imp_inter);
@@ -507,21 +405,15 @@ void base_clearing(){
             Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
             SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 3;
-                times.time_mode = 6;
-                times.time_max  = 9;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 4;
-                times.time_mode = 7;
-                times.time_max  = 10;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
             }else{
-                times.time_min  = 5;
-                times.time_mode = 10;
-                times.time_max  = 15;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
             }
 
-            fila_limp_acab_boca.time_event += trand(times);
             fila_limp_acab_boca.funct_event = &mount_clearing;
             fila_limp_acab_boca.uses.vaso   = vaso;
             insert_list_event(fila_limp_acab_boca);
@@ -534,21 +426,15 @@ void base_clearing(){
         Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
         SM_queue_vasos[PREP_BOCA].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 7;
-            times.time_max  = 12;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 10;
-            times.time_max  = 15;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
         }else{
-            times.time_min  = 9;
-            times.time_mode = 14;
-            times.time_max  = 19;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
         }
 
-        fila_prep_boca.time_event += trand(times);
         fila_prep_boca.funct_event = &mouth_preparation;
         fila_prep_boca.uses.vaso   = vaso;
         insert_list_event(fila_prep_boca);
@@ -559,50 +445,40 @@ void base_clearing(){
         Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BASE].front();
         SM_queue_vasos[LIMP_ACAB_BASE].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BASE)), LIMP_ACAB_BASE);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
         }
 
-        fila_limp_acab_base.time_event += trand(times);
         fila_limp_acab_base.funct_event = &base_clearing;
         fila_limp_acab_base.uses.vaso   = vaso;
         insert_list_event(fila_limp_acab_base);
 
     }else if (SM_queue_vasos[PREPARA_FORM].size()){
       Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
-      if (SM_massa >= vaso->get_quatd_massa())
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
         if (SM_espaco_secagem >= vaso->get_quatd_espace()){
           SM_espaco_secagem -= vaso->get_quatd_espace();
           SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
           flag = false;
           event_t fila_prepara_form = new_event;
           SM_queue_vasos[PREPARA_FORM].pop_front();
           vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
           if (vaso->get_type() == SMALL){
-              times.time_min  = 1;
-              times.time_mode = 2;
-              times.time_max  = 3;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
           }else if (vaso->get_type() == MEDIUM){
-              times.time_min  = 2;
-              times.time_mode = 4;
-              times.time_max  = 6;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
           }else{
-              times.time_min  = 4;
-              times.time_mode = 6;
-              times.time_max  = 8;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
           }
 
-          fila_prepara_form.time_event += trand(times);
           fila_prepara_form.funct_event = &form_preparation;
           fila_prepara_form.uses.vaso   = vaso;
           insert_list_event(fila_prepara_form);
@@ -612,17 +488,11 @@ void base_clearing(){
 LIMP_BASE:
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 5;
-        times.time_mode = 7;
-        times.time_max  = 8;
+        new_event.time_event  += trand(SM_times_events["limp_acab_base-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 7;
-        times.time_mode = 10;
-        times.time_max  = 13;
+        new_event.time_event  += trand(SM_times_events["limp_acab_base-m"]);
     }else{
-        times.time_min  = 10;
-        times.time_mode = 14;
-        times.time_max  = 18;
+        new_event.time_event  += trand(SM_times_events["limp_acab_base-b"]);
     }
 
     if (flag){
@@ -635,7 +505,6 @@ LIMP_BASE:
         }
     }
 
-    new_event.time_event += trand(times);
     new_event.funct_event = &base_finish;
     new_event.uses.art    = NULL;
     new_event.uses.esp    = NULL;
@@ -647,24 +516,18 @@ void base_finish(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    times_triangular_t times;
+
+    if (new_event.uses.vaso->get_type() == SMALL){
+        new_event.time_event  += trand(SM_times_events["secagem_base-s"]);
+    }else if (new_event.uses.vaso->get_type() == MEDIUM){
+        new_event.time_event  += trand(SM_times_events["secagem_base-m"]);
+    }else{
+        new_event.time_event  += trand(SM_times_events["secagem_base-b"]);
+    }
     if (Especialista::is_free()){
         Especialista* especialista  = Especialista::get_free();
         especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
-        if (new_event.uses.vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
-        }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
-        }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
-        }
-        new_event.time_event += trand(times);
+
         new_event.funct_event = &mouth_preparation;
         new_event.uses.esp    = especialista;
         insert_list_event(new_event);
@@ -673,20 +536,7 @@ void base_finish(){
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
-        if (new_event.uses.vaso->get_type() == SMALL){
-            times.time_min  = 3;
-            times.time_mode = 7;
-            times.time_max  = 11;
-        }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 10;
-            times.time_max  = 15;
-        }else{
-            times.time_min  = 9;
-            times.time_mode = 14;
-            times.time_max  = 19;
-        }
-        new_event.time_event += trand(times);
+
         new_event.funct_event = &mouth_preparation;
         new_event.uses.art    = artesao;
         insert_list_event(new_event);
@@ -701,21 +551,14 @@ void mouth_preparation(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    times_triangular_t times;
+
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 1;
-        times.time_mode = 3;
-        times.time_max  = 5;
+        new_event.time_event  += trand(SM_times_events["prep_boca-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 2;
-        times.time_mode = 5;
-        times.time_max  = 8;
+        new_event.time_event  += trand(SM_times_events["prep_boca-m"]);
     }else{
-        times.time_min  = 4;
-        times.time_mode = 8;
-        times.time_max  = 12;
+        new_event.time_event  += trand(SM_times_events["prep_boca-b"]);
     }
-    new_event.time_event += trand(times);
     new_event.funct_event = &mouth_set_init;
     insert_list_event(new_event);
 }
@@ -760,21 +603,15 @@ void mouth_set_init(){
             Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
             SM_queue_vasos[ENV_GERAL].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 5;
-                times.time_mode = 10;
-                times.time_max  = 15;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 13;
-                times.time_mode = 18;
-                times.time_max  = 23;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
             }else{
-                times.time_min  = 20;
-                times.time_mode = 25;
-                times.time_max  = 30;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
             }
 
-            fila_env_geral.time_event += trand(times);
             fila_env_geral.funct_event = &varnishing;
             fila_env_geral.uses.vaso   = vaso;
             insert_list_event(fila_env_geral);
@@ -786,21 +623,15 @@ void mouth_set_init(){
             Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
             SM_queue_vasos[IMP_INTER].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 1;
-                times.time_mode = 3;
-                times.time_max  = 5;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 3;
-                times.time_mode = 5;
-                times.time_max  = 7;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
             }else{
-                times.time_min  = 5;
-                times.time_mode = 8;
-                times.time_max  = 11;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
             }
 
-            fila_imp_inter.time_event += trand(times);
             fila_imp_inter.funct_event = &inter_waterpoofing;
             fila_imp_inter.uses.vaso   = vaso;
             insert_list_event(fila_imp_inter);
@@ -811,21 +642,15 @@ void mouth_set_init(){
             Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
             SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 3;
-                times.time_mode = 6;
-                times.time_max  = 9;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 4;
-                times.time_mode = 7;
-                times.time_max  = 10;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
             }else{
-                times.time_min  = 5;
-                times.time_mode = 10;
-                times.time_max  = 15;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
             }
 
-            fila_limp_acab_boca.time_event += trand(times);
             fila_limp_acab_boca.funct_event = &mount_clearing;
             fila_limp_acab_boca.uses.vaso   = vaso;
             insert_list_event(fila_limp_acab_boca);
@@ -838,21 +663,15 @@ void mouth_set_init(){
         Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
         SM_queue_vasos[PREP_BOCA].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 7;
-            times.time_max  = 12;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 10;
-            times.time_max  = 15;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
         }else{
-            times.time_min  = 9;
-            times.time_mode = 14;
-            times.time_max  = 19;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
         }
 
-        fila_prep_boca.time_event += trand(times);
         fila_prep_boca.funct_event = &mouth_preparation;
         fila_prep_boca.uses.vaso   = vaso;
         insert_list_event(fila_prep_boca);
@@ -863,50 +682,40 @@ void mouth_set_init(){
         Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BASE].front();
         SM_queue_vasos[LIMP_ACAB_BASE].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BASE)), LIMP_ACAB_BASE);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
         }
 
-        fila_limp_acab_base.time_event += trand(times);
         fila_limp_acab_base.funct_event = &base_clearing;
         fila_limp_acab_base.uses.vaso   = vaso;
         insert_list_event(fila_limp_acab_base);
 
     }else if (SM_queue_vasos[PREPARA_FORM].size()){
       Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
-      if (SM_massa >= vaso->get_quatd_massa())
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
         if (SM_espaco_secagem >= vaso->get_quatd_espace()){
           SM_espaco_secagem -= vaso->get_quatd_espace();
           SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
           flag = false;
           event_t fila_prepara_form = new_event;
           SM_queue_vasos[PREPARA_FORM].pop_front();
           vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
           if (vaso->get_type() == SMALL){
-              times.time_min  = 1;
-              times.time_mode = 2;
-              times.time_max  = 3;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
           }else if (vaso->get_type() == MEDIUM){
-              times.time_min  = 2;
-              times.time_mode = 4;
-              times.time_max  = 6;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
           }else{
-              times.time_min  = 4;
-              times.time_mode = 6;
-              times.time_max  = 8;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
           }
 
-          fila_prepara_form.time_event += trand(times);
           fila_prepara_form.funct_event = &form_preparation;
           fila_prepara_form.uses.vaso   = vaso;
           insert_list_event(fila_prepara_form);
@@ -916,17 +725,11 @@ void mouth_set_init(){
 ACAB_INICIAL_BOCA:
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 5;
-        times.time_mode = 8;
-        times.time_max  = 13;
+        new_event.time_event  += trand(SM_times_events["acab_ini_boca-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 7;
-        times.time_mode = 10;
-        times.time_max  = 13;
+        new_event.time_event  += trand(SM_times_events["acab_ini_boca-m"]);
     }else{
-        times.time_min  = 10;
-        times.time_mode = 13;
-        times.time_max  = 16;
+        new_event.time_event  += trand(SM_times_events["acab_ini_boca-b"]);
     }
 
     if (flag){
@@ -939,7 +742,7 @@ ACAB_INICIAL_BOCA:
         }
     }
 
-    new_event.time_event += trand(times);
+
     new_event.funct_event = &mouth_set_drying;
     new_event.uses.art    = NULL;
     new_event.uses.esp    = NULL;
@@ -951,24 +754,20 @@ void mouth_set_drying(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    times_triangular_t times;
+
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
+
         if (new_event.uses.vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            new_event.time_event  += trand(SM_times_events["sec_acab_boca-s"]);
         }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            new_event.time_event  += trand(SM_times_events["sec_acab_boca-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            new_event.time_event  += trand(SM_times_events["sec_acab_boca-b"]);
         }
-        new_event.time_event += trand(times);
+
+
         new_event.funct_event = &mount_clearing;
         new_event.uses.art    = artesao;
         insert_list_event(new_event);
@@ -1018,21 +817,15 @@ void mount_clearing(){
             Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
             SM_queue_vasos[ENV_GERAL].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 5;
-                times.time_mode = 10;
-                times.time_max  = 15;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 13;
-                times.time_mode = 18;
-                times.time_max  = 23;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
             }else{
-                times.time_min  = 20;
-                times.time_mode = 25;
-                times.time_max  = 30;
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
             }
 
-            fila_env_geral.time_event += trand(times);
             fila_env_geral.funct_event = &varnishing;
             fila_env_geral.uses.vaso   = vaso;
             insert_list_event(fila_env_geral);
@@ -1044,21 +837,15 @@ void mount_clearing(){
             Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
             SM_queue_vasos[IMP_INTER].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 1;
-                times.time_mode = 3;
-                times.time_max  = 5;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 3;
-                times.time_mode = 5;
-                times.time_max  = 7;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
             }else{
-                times.time_min  = 5;
-                times.time_mode = 8;
-                times.time_max  = 11;
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
             }
 
-            fila_imp_inter.time_event += trand(times);
             fila_imp_inter.funct_event = &inter_waterpoofing;
             fila_imp_inter.uses.vaso   = vaso;
             insert_list_event(fila_imp_inter);
@@ -1069,21 +856,15 @@ void mount_clearing(){
             Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
             SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
             vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
             if (vaso->get_type() == SMALL){
-                times.time_min  = 3;
-                times.time_mode = 6;
-                times.time_max  = 9;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
             }else if (vaso->get_type() == MEDIUM){
-                times.time_min  = 4;
-                times.time_mode = 7;
-                times.time_max  = 10;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
             }else{
-                times.time_min  = 5;
-                times.time_mode = 10;
-                times.time_max  = 15;
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
             }
 
-            fila_limp_acab_boca.time_event += trand(times);
             fila_limp_acab_boca.funct_event = &mount_clearing;
             fila_limp_acab_boca.uses.vaso   = vaso;
             insert_list_event(fila_limp_acab_boca);
@@ -1096,21 +877,15 @@ void mount_clearing(){
         Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
         SM_queue_vasos[PREP_BOCA].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 7;
-            times.time_max  = 12;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 10;
-            times.time_max  = 15;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
         }else{
-            times.time_min  = 9;
-            times.time_mode = 14;
-            times.time_max  = 19;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
         }
 
-        fila_prep_boca.time_event += trand(times);
         fila_prep_boca.funct_event = &mouth_preparation;
         fila_prep_boca.uses.vaso   = vaso;
         insert_list_event(fila_prep_boca);
@@ -1121,69 +896,54 @@ void mount_clearing(){
         Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BASE].front();
         SM_queue_vasos[LIMP_ACAB_BASE].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BASE)), LIMP_ACAB_BASE);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
         }
 
-        fila_limp_acab_base.time_event += trand(times);
         fila_limp_acab_base.funct_event = &base_clearing;
         fila_limp_acab_base.uses.vaso   = vaso;
         insert_list_event(fila_limp_acab_base);
 
     }else if (SM_queue_vasos[PREPARA_FORM].size()){
       Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
-      if (SM_massa >= vaso->get_quatd_massa())
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
         if (SM_espaco_secagem >= vaso->get_quatd_espace()){
           SM_espaco_secagem -= vaso->get_quatd_espace();
           SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
           flag = false;
           event_t fila_prepara_form = new_event;
           SM_queue_vasos[PREPARA_FORM].pop_front();
           vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
           if (vaso->get_type() == SMALL){
-              times.time_min  = 1;
-              times.time_mode = 2;
-              times.time_max  = 3;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
           }else if (vaso->get_type() == MEDIUM){
-              times.time_min  = 2;
-              times.time_mode = 4;
-              times.time_max  = 6;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
           }else{
-              times.time_min  = 4;
-              times.time_mode = 6;
-              times.time_max  = 8;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
           }
 
-          fila_prepara_form.time_event += trand(times);
           fila_prepara_form.funct_event = &form_preparation;
           fila_prepara_form.uses.vaso   = vaso;
           insert_list_event(fila_prepara_form);
        }
     }
+
 LIMP_BOCA:
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 5;
-        times.time_mode = 7;
-        times.time_max  = 8;
+        new_event.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 7;
-        times.time_mode = 10;
-        times.time_max  = 13;
+        new_event.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
     }else{
-        times.time_min  = 10;
-        times.time_mode = 14;
-        times.time_max  = 18;
+        new_event.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
     }
 
     if (flag){
@@ -1196,7 +956,7 @@ LIMP_BOCA:
         }
     }
 
-    new_event.time_event += trand(times);
+
     new_event.funct_event = &mount_drying;
     new_event.uses.art    = NULL;
     new_event.uses.esp    = NULL;
@@ -1208,24 +968,19 @@ void mount_drying(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    times_triangular_t times;
+
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
+
         if (new_event.uses.vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            new_event.time_event  += trand(SM_times_events["secagem_boca-s"]);
         }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            new_event.time_event  += trand(SM_times_events["secagem_boca-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            new_event.time_event  += trand(SM_times_events["secagem_boca-b"]);
         }
-        new_event.time_event += trand(times);
+
         new_event.funct_event = &inter_waterpoofing;
         new_event.uses.art    = artesao;
         insert_list_event(new_event);
@@ -1272,21 +1027,15 @@ void inter_waterpoofing(){
         Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
         SM_queue_vasos[ENV_GERAL].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 7;
-            times.time_max  = 12;
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 10;
-            times.time_max  = 15;
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
         }else{
-            times.time_min  = 9;
-            times.time_mode = 14;
-            times.time_max  = 19;
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
         }
 
-        fila_env_geral.time_event += trand(times);
         fila_env_geral.funct_event = &varnishing;
         fila_env_geral.uses.vaso   = vaso;
         insert_list_event(fila_env_geral);
@@ -1297,21 +1046,15 @@ void inter_waterpoofing(){
         Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
         SM_queue_vasos[IMP_INTER].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
         }
 
-        fila_imp_inter.time_event += trand(times);
         fila_imp_inter.funct_event = &inter_waterpoofing;
         fila_imp_inter.uses.vaso   = vaso;
         insert_list_event(fila_imp_inter);
@@ -1322,21 +1065,15 @@ void inter_waterpoofing(){
         Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
         SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 1;
-            times.time_mode = 2;
-            times.time_max  = 3;
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 2;
-            times.time_mode = 4;
-            times.time_max  = 6;
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
         }else{
-            times.time_min  = 4;
-            times.time_mode = 6;
-            times.time_max  = 8;
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
         }
 
-        fila_limp_acab_boca.time_event += trand(times);
         fila_limp_acab_boca.funct_event = &mount_clearing;
         fila_limp_acab_boca.uses.vaso   = vaso;
         insert_list_event(fila_limp_acab_boca);
@@ -1346,49 +1083,39 @@ void inter_waterpoofing(){
         Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
         SM_queue_vasos[PREP_BOCA].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 1;
-            times.time_mode = 2;
-            times.time_max  = 3;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 2;
-            times.time_mode = 4;
-            times.time_max  = 6;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
         }else{
-            times.time_min  = 4;
-            times.time_mode = 6;
-            times.time_max  = 8;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
         }
 
-        fila_prep_boca.time_event += trand(times);
         fila_prep_boca.funct_event = &mouth_preparation;
         fila_prep_boca.uses.vaso   = vaso;
         insert_list_event(fila_prep_boca);
     }else if (SM_queue_vasos[PREPARA_FORM].size()){
       Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
-      if (SM_massa >= vaso->get_quatd_massa())
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
         if (SM_espaco_secagem >= vaso->get_quatd_espace()){
           SM_espaco_secagem -= vaso->get_quatd_espace();
           SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
           flag = false;
           event_t fila_prepara_form = new_event;
           SM_queue_vasos[PREPARA_FORM].pop_front();
           vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
           if (vaso->get_type() == SMALL){
-              times.time_min  = 1;
-              times.time_mode = 2;
-              times.time_max  = 3;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
           }else if (vaso->get_type() == MEDIUM){
-              times.time_min  = 2;
-              times.time_mode = 4;
-              times.time_max  = 6;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
           }else{
-              times.time_min  = 4;
-              times.time_mode = 6;
-              times.time_max  = 8;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
           }
 
-          fila_prepara_form.time_event += trand(times);
           fila_prepara_form.funct_event = &form_preparation;
           fila_prepara_form.uses.vaso   = vaso;
           insert_list_event(fila_prepara_form);
@@ -1396,25 +1123,19 @@ void inter_waterpoofing(){
     }
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 5;
-        times.time_mode = 7;
-        times.time_max  = 8;
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 7;
-        times.time_mode = 10;
-        times.time_max  = 13;
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-m"]);
     }else{
-        times.time_min  = 10;
-        times.time_mode = 14;
-        times.time_max  = 18;
+        new_event.time_event  += trand(SM_times_events["sec_acab_base-b"]);
     }
 
     if (flag){
-        new_event.uses.art->set_situation(state_art::OCIOSITY_ART);
-        new_event.uses.art->set_start_ociosity(SM_time_simulation);
+            new_event.uses.art->set_situation(state_art::OCIOSITY_ART);
+            new_event.uses.art->set_start_ociosity(SM_time_simulation);
     }
 
-    new_event.time_event += trand(times);
+
     new_event.funct_event = &inter_drying;
     new_event.uses.art    = NULL;
     new_event.uses.esp    = NULL;
@@ -1426,24 +1147,20 @@ void inter_drying(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    times_triangular_t times;
+
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
+
         if (new_event.uses.vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            new_event.time_event  += trand(SM_times_events["sec_interna-s"]);
         }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            new_event.time_event  += trand(SM_times_events["sec_interna-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            new_event.time_event  += trand(SM_times_events["sec_interna-b"]);
         }
-        new_event.time_event += trand(times);
+
+
         new_event.funct_event = &varnishing;
         new_event.uses.art    = artesao;
         insert_list_event(new_event);
@@ -1457,8 +1174,8 @@ void varnishing(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
-
     times_triangular_t times;
+
     bool flag = true;
     if (SM_massa <= PORC_NIVEL_MASSA){
         flag = false;
@@ -1490,21 +1207,15 @@ void varnishing(){
         Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
         SM_queue_vasos[ENV_GERAL].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 7;
-            times.time_max  = 12;
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 10;
-            times.time_max  = 15;
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
         }else{
-            times.time_min  = 9;
-            times.time_mode = 14;
-            times.time_max  = 19;
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
         }
 
-        fila_env_geral.time_event += trand(times);
         fila_env_geral.funct_event = &varnishing;
         fila_env_geral.uses.vaso   = vaso;
         insert_list_event(fila_env_geral);
@@ -1515,21 +1226,15 @@ void varnishing(){
         Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
         SM_queue_vasos[IMP_INTER].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 2;
-            times.time_mode = 5;
-            times.time_max  = 8;
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 5;
-            times.time_mode = 8;
-            times.time_max  = 11;
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
         }else{
-            times.time_min  = 8;
-            times.time_mode = 11;
-            times.time_max  = 14;
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
         }
 
-        fila_imp_inter.time_event += trand(times);
         fila_imp_inter.funct_event = &inter_waterpoofing;
         fila_imp_inter.uses.vaso   = vaso;
         insert_list_event(fila_imp_inter);
@@ -1540,21 +1245,15 @@ void varnishing(){
         Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
         SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 1;
-            times.time_mode = 2;
-            times.time_max  = 3;
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 2;
-            times.time_mode = 4;
-            times.time_max  = 6;
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
         }else{
-            times.time_min  = 4;
-            times.time_mode = 6;
-            times.time_max  = 8;
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
         }
 
-        fila_limp_acab_boca.time_event += trand(times);
         fila_limp_acab_boca.funct_event = &mount_clearing;
         fila_limp_acab_boca.uses.vaso   = vaso;
         insert_list_event(fila_limp_acab_boca);
@@ -1564,49 +1263,39 @@ void varnishing(){
         Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
         SM_queue_vasos[PREP_BOCA].pop_front();
         vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
         if (vaso->get_type() == SMALL){
-            times.time_min  = 1;
-            times.time_mode = 2;
-            times.time_max  = 3;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
         }else if (vaso->get_type() == MEDIUM){
-            times.time_min  = 2;
-            times.time_mode = 4;
-            times.time_max  = 6;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
         }else{
-            times.time_min  = 4;
-            times.time_mode = 6;
-            times.time_max  = 8;
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
         }
 
-        fila_prep_boca.time_event += trand(times);
         fila_prep_boca.funct_event = &mouth_preparation;
         fila_prep_boca.uses.vaso   = vaso;
         insert_list_event(fila_prep_boca);
     }else if (SM_queue_vasos[PREPARA_FORM].size()){
       Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
-      if (SM_massa >= vaso->get_quatd_massa())
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
         if (SM_espaco_secagem >= vaso->get_quatd_espace()){
           SM_espaco_secagem -= vaso->get_quatd_espace();
           SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
           flag = false;
           event_t fila_prepara_form = new_event;
           SM_queue_vasos[PREPARA_FORM].pop_front();
           vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
           if (vaso->get_type() == SMALL){
-              times.time_min  = 1;
-              times.time_mode = 2;
-              times.time_max  = 3;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
           }else if (vaso->get_type() == MEDIUM){
-              times.time_min  = 2;
-              times.time_mode = 4;
-              times.time_max  = 6;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
           }else{
-              times.time_min  = 4;
-              times.time_mode = 6;
-              times.time_max  = 8;
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
           }
 
-          fila_prepara_form.time_event += trand(times);
           fila_prepara_form.funct_event = &form_preparation;
           fila_prepara_form.uses.vaso   = vaso;
           insert_list_event(fila_prepara_form);
@@ -1614,25 +1303,19 @@ void varnishing(){
     }
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        times.time_min  = 5;
-        times.time_mode = 7;
-        times.time_max  = 8;
+        new_event.time_event  += trand(SM_times_events["env_geral-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        times.time_min  = 7;
-        times.time_mode = 10;
-        times.time_max  = 13;
+        new_event.time_event  += trand(SM_times_events["env_geral-m"]);
     }else{
-        times.time_min  = 10;
-        times.time_mode = 14;
-        times.time_max  = 18;
+        new_event.time_event  += trand(SM_times_events["env_geral-b"]);
     }
 
     if (flag){
-        new_event.uses.art->set_situation(state_art::OCIOSITY_ART);
-        new_event.uses.art->set_start_ociosity(SM_time_simulation);
+            new_event.uses.art->set_situation(state_art::OCIOSITY_ART);
+            new_event.uses.art->set_start_ociosity(SM_time_simulation);
     }
 
-    new_event.time_event += trand(times);
+
     new_event.funct_event = &final_drying;
     new_event.uses.art    = NULL;
     new_event.uses.esp    = NULL;
@@ -1644,7 +1327,41 @@ void final_drying(){
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
 
-    SM_espaco_secagem++;
+
+    SM_espaco_secagem += new_event.uses.vaso->get_quatd_espace();
+    if (Especialista::is_free() || Artesao::is_free())
+      if (SM_queue_vasos[PREPARA_FORM].size()){
+         Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
+         if (SM_massa  >= vaso->get_quatd_massa())
+           if (SM_pedra >= vaso->get_quatd_pedra())
+            if (SM_espaco_secagem >= vaso->get_quatd_espace()){
+              SM_espaco_secagem -= vaso->get_quatd_espace();
+              SM_massa          -= vaso->get_quatd_massa();
+              SM_pedra          -= vaso->get_quatd_pedra();
+              event_t fila_prepara_form = new_event;
+              SM_queue_vasos[PREPARA_FORM].pop_front();
+              vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
+              if (vaso->get_type() == SMALL){
+                  fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
+              }else if (vaso->get_type() == MEDIUM){
+                  fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
+              }else{
+                  fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
+              }
+
+              if (Especialista::is_free()){
+                  fila_prepara_form.uses.esp = Especialista::get_free();
+              }else{
+                  fila_prepara_form.uses.art = Artesao::get_free();
+              }
+
+              fila_prepara_form.funct_event = &form_preparation;
+              fila_prepara_form.uses.vaso   = vaso;
+              insert_list_event(fila_prepara_form);
+           }
+      }
+    new_event.uses.vaso->set_end_time(SM_time_simulation);
     SM_vaso_finish.push_back(new_event.uses.vaso);
 }
 
@@ -1652,10 +1369,275 @@ void preparation_massa(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
+
+    bool flag = true;
+    times_triangular_t times;
+    SM_massa = SM_massa_MAX;
+    if (SM_massa <= PORC_NIVEL_MASSA){
+        flag = false;
+        event_t prep_massa = new_event;
+        /* Tempo para fazer massa */
+        times.time_min  = 10;
+        times.time_mode = 20;
+        times.time_max  = 30;
+        prep_massa.time_event += trand(times);
+        prep_massa.funct_event = &preparation_massa;
+        prep_massa.uses.vaso   = NULL;
+        insert_list_event(prep_massa);
+
+    }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+        flag = false;
+        event_t prep_pedra = new_event;
+        /* Tempo para fazer pedras*/
+        times.time_min  = 10;
+        times.time_mode = 20;
+        times.time_max  = 30;
+        prep_pedra.time_event += trand(times);
+        prep_pedra.funct_event = &preparation_pedras;
+        prep_pedra.uses.vaso   = NULL;
+        insert_list_event(prep_pedra);
+
+    }else if (SM_queue_vasos[ENV_GERAL].size()){
+        flag = false;
+        event_t fila_env_geral = new_event;
+        Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
+        SM_queue_vasos[ENV_GERAL].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+
+        if (vaso->get_type() == SMALL){
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
+        }else{
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
+        }
+
+        fila_env_geral.funct_event = &varnishing;
+        fila_env_geral.uses.vaso   = vaso;
+        insert_list_event(fila_env_geral);
+
+    }else if (SM_queue_vasos[IMP_INTER].size()){
+        flag = false;
+        event_t fila_imp_inter = new_event;
+        Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
+        SM_queue_vasos[IMP_INTER].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
+        if (vaso->get_type() == SMALL){
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
+        }else{
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
+        }
+
+        fila_imp_inter.funct_event = &inter_waterpoofing;
+        fila_imp_inter.uses.vaso   = vaso;
+        insert_list_event(fila_imp_inter);
+
+    }else if (SM_queue_vasos[LIMP_ACAB_BOCA].size()){
+        flag = false;
+        event_t fila_limp_acab_boca = new_event;
+        Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
+        SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
+        if (vaso->get_type() == SMALL){
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
+        }else{
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
+        }
+
+        fila_limp_acab_boca.funct_event = &mount_clearing;
+        fila_limp_acab_boca.uses.vaso   = vaso;
+        insert_list_event(fila_limp_acab_boca);
+    }else if (SM_queue_vasos[PREP_BOCA].size()){
+        flag = false;
+        event_t fila_prep_boca = new_event;
+        Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
+        SM_queue_vasos[PREP_BOCA].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
+        if (vaso->get_type() == SMALL){
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
+        }else{
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
+        }
+
+        fila_prep_boca.funct_event = &mouth_preparation;
+        fila_prep_boca.uses.vaso   = vaso;
+        insert_list_event(fila_prep_boca);
+    }else if (SM_queue_vasos[PREPARA_FORM].size()){
+      Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
+        if (SM_espaco_secagem >= vaso->get_quatd_espace()){
+          SM_espaco_secagem -= vaso->get_quatd_espace();
+          SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
+          flag = false;
+          event_t fila_prepara_form = new_event;
+          SM_queue_vasos[PREPARA_FORM].pop_front();
+          vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
+          if (vaso->get_type() == SMALL){
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
+          }else if (vaso->get_type() == MEDIUM){
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
+          }else{
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
+          }
+
+          fila_prepara_form.funct_event = &form_preparation;
+          fila_prepara_form.uses.vaso   = vaso;
+          insert_list_event(fila_prepara_form);
+       }
+    }
+    if (flag){
+            new_event.uses.art->set_situation(state_art::OCIOSITY_ART);
+            new_event.uses.art->set_start_ociosity(SM_time_simulation);
+    }
 }
 
 void preparation_pedras(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
+
+    bool flag = true;
+    times_triangular_t times;
+    SM_pedra = SM_pedra_MAX;
+    if (SM_massa <= PORC_NIVEL_MASSA){
+        flag = false;
+        event_t prep_massa = new_event;
+        /* Tempo para fazer massa */
+        times.time_min  = 10;
+        times.time_mode = 20;
+        times.time_max  = 30;
+        prep_massa.time_event += trand(times);
+        prep_massa.funct_event = &preparation_massa;
+        prep_massa.uses.vaso   = NULL;
+        insert_list_event(prep_massa);
+
+    }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+        flag = false;
+        event_t prep_pedra = new_event;
+        /* Tempo para fazer pedras*/
+        times.time_min  = 10;
+        times.time_mode = 20;
+        times.time_max  = 30;
+        prep_pedra.time_event += trand(times);
+        prep_pedra.funct_event = &preparation_pedras;
+        prep_pedra.uses.vaso   = NULL;
+        insert_list_event(prep_pedra);
+
+    }else if (SM_queue_vasos[ENV_GERAL].size()){
+        flag = false;
+        event_t fila_env_geral = new_event;
+        Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
+        SM_queue_vasos[ENV_GERAL].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
+
+        if (vaso->get_type() == SMALL){
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
+        }else{
+            fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
+        }
+
+        fila_env_geral.funct_event = &varnishing;
+        fila_env_geral.uses.vaso   = vaso;
+        insert_list_event(fila_env_geral);
+
+    }else if (SM_queue_vasos[IMP_INTER].size()){
+        flag = false;
+        event_t fila_imp_inter = new_event;
+        Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
+        SM_queue_vasos[IMP_INTER].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
+        if (vaso->get_type() == SMALL){
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
+        }else{
+            fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
+        }
+
+        fila_imp_inter.funct_event = &inter_waterpoofing;
+        fila_imp_inter.uses.vaso   = vaso;
+        insert_list_event(fila_imp_inter);
+
+    }else if (SM_queue_vasos[LIMP_ACAB_BOCA].size()){
+        flag = false;
+        event_t fila_limp_acab_boca = new_event;
+        Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
+        SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
+        if (vaso->get_type() == SMALL){
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
+        }else{
+            fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
+        }
+
+        fila_limp_acab_boca.funct_event = &mount_clearing;
+        fila_limp_acab_boca.uses.vaso   = vaso;
+        insert_list_event(fila_limp_acab_boca);
+    }else if (SM_queue_vasos[PREP_BOCA].size()){
+        flag = false;
+        event_t fila_prep_boca = new_event;
+        Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
+        SM_queue_vasos[PREP_BOCA].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
+        if (vaso->get_type() == SMALL){
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
+        }else{
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
+        }
+
+        fila_prep_boca.funct_event = &mouth_preparation;
+        fila_prep_boca.uses.vaso   = vaso;
+        insert_list_event(fila_prep_boca);
+    }else if (SM_queue_vasos[PREPARA_FORM].size()){
+      Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
+        if (SM_espaco_secagem >= vaso->get_quatd_espace()){
+          SM_espaco_secagem -= vaso->get_quatd_espace();
+          SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
+          flag = false;
+          event_t fila_prepara_form = new_event;
+          SM_queue_vasos[PREPARA_FORM].pop_front();
+          vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
+          if (vaso->get_type() == SMALL){
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
+          }else if (vaso->get_type() == MEDIUM){
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
+          }else{
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
+          }
+
+          fila_prepara_form.funct_event = &form_preparation;
+          fila_prepara_form.uses.vaso   = vaso;
+          insert_list_event(fila_prepara_form);
+       }
+    }
+
+    if (flag){
+            new_event.uses.art->set_situation(state_art::OCIOSITY_ART);
+            new_event.uses.art->set_start_ociosity(SM_time_simulation);
+    }
 }
