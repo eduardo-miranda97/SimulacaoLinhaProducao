@@ -31,17 +31,19 @@ void begin_requets(){
           }
           if (Artesao::is_free() || Especialista::is_free())
              if (SM_massa >= vaso->get_quatd_massa())
+              if (SM_pedra >= vaso->get_quatd_pedra())
                if (SM_espaco_secagem >= vaso->get_quatd_espace()){
                       SM_massa          -= vaso->get_quatd_massa();
+                      SM_pedra          -= vaso->get_quatd_pedra();
                       SM_espaco_secagem -= vaso->get_quatd_espace();
 
-                      event_t new_event;
+                      event_t prep_form;
                       if (vaso->get_type() == SMALL){
-                          new_event.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-s"]));
+                          prep_form.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-s"]));
                       }else if (vaso->get_type() == MEDIUM){
-                          new_event.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-m"]));
+                          prep_form.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-m"]));
                       }else{
-                          new_event.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-b"]));
+                          prep_form.time_event  = (SM_time_simulation+trand(SM_times_events["prep_form-b"]));
                       }
 
                       if (Especialista::is_free()){
@@ -49,20 +51,20 @@ void begin_requets(){
                           especialista->set_situation(state_esp::ACTIVE_ESP);
                           especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
 
-                          new_event.funct_event = &form_preparation;
-                          new_event.uses.vaso   = vaso;
-                          new_event.uses.art    = NULL;
-                          new_event.uses.esp    = especialista;
+                          prep_form.funct_event = &form_preparation;
+                          prep_form.uses.vaso   = vaso;
+                          prep_form.uses.art    = NULL;
+                          prep_form.uses.esp    = especialista;
                       }else{
                           Artesao* artesao = Artesao::get_free();
                           artesao->set_situation(state_art::ACTIVE_ART);
                           artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
-                          new_event.funct_event = &form_preparation;
-                          new_event.uses.vaso   = vaso;
-                          new_event.uses.art    = artesao;
-                          new_event.uses.esp    = NULL;
+                          prep_form.funct_event = &form_preparation;
+                          prep_form.uses.vaso   = vaso;
+                          prep_form.uses.art    = artesao;
+                          prep_form.uses.esp    = NULL;
                       }
-                      insert_list_event(new_event);
+                      insert_list_event(prep_form);
                       continue;
                 }
           vaso->set_queue(SM_time_simulation, PREPARA_FORM);
@@ -306,6 +308,7 @@ void base_set_drying(){
     }
     if (Especialista::is_free()){
         Especialista* especialista  = Especialista::get_free();
+        especialista->set_situation(state_esp::ACTIVE_ESP);
         especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
 
         new_event.funct_event = &base_clearing;
@@ -315,6 +318,7 @@ void base_set_drying(){
     }
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
+        artesao->set_situation(state_art::ACTIVE_ART);
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
 
         new_event.funct_event = &base_clearing;
@@ -526,6 +530,7 @@ void base_finish(){
     }
     if (Especialista::is_free()){
         Especialista* especialista  = Especialista::get_free();
+        especialista->set_situation(state_esp::ACTIVE_ESP);
         especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
 
         new_event.funct_event = &mouth_preparation;
@@ -535,6 +540,7 @@ void base_finish(){
     }
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
+        artesao->set_situation(state_art::ACTIVE_ART);
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
 
         new_event.funct_event = &mouth_preparation;
@@ -757,6 +763,7 @@ void mouth_set_drying(){
 
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
+        artesao->set_situation(state_art::ACTIVE_ART);
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
 
         if (new_event.uses.vaso->get_type() == SMALL){
@@ -971,6 +978,7 @@ void mount_drying(){
 
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
+        artesao->set_situation(state_art::ACTIVE_ART);
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
 
         if (new_event.uses.vaso->get_type() == SMALL){
@@ -1150,6 +1158,7 @@ void inter_drying(){
 
     if (Artesao::is_free()){
         Artesao* artesao  = Artesao::get_free();
+        artesao->set_situation(state_art::ACTIVE_ART);
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
 
         if (new_event.uses.vaso->get_type() == SMALL){
@@ -1329,38 +1338,232 @@ void final_drying(){
 
 
     SM_espaco_secagem += new_event.uses.vaso->get_quatd_espace();
-    if (Especialista::is_free() || Artesao::is_free())
-      if (SM_queue_vasos[PREPARA_FORM].size()){
-         Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
-         if (SM_massa  >= vaso->get_quatd_massa())
-           if (SM_pedra >= vaso->get_quatd_pedra())
-            if (SM_espaco_secagem >= vaso->get_quatd_espace()){
-              SM_espaco_secagem -= vaso->get_quatd_espace();
-              SM_massa          -= vaso->get_quatd_massa();
-              SM_pedra          -= vaso->get_quatd_pedra();
-              event_t fila_prepara_form = new_event;
-              SM_queue_vasos[PREPARA_FORM].pop_front();
-              vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+    // if (Especialista::is_free() || Artesao::is_free())
+    //   if (SM_queue_vasos[PREPARA_FORM].size()){
+    //      Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
+    //      if (SM_massa  >= vaso->get_quatd_massa())
+    //        if (SM_pedra >= vaso->get_quatd_pedra())
+    //         if (SM_espaco_secagem >= vaso->get_quatd_espace()){
+    //           SM_espaco_secagem -= vaso->get_quatd_espace();
+    //           SM_massa          -= vaso->get_quatd_massa();
+    //           SM_pedra          -= vaso->get_quatd_pedra();
+    //           event_t fila_prepara_form = new_event;
+    //           SM_queue_vasos[PREPARA_FORM].pop_front();
+    //           vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+    //
+    //           if (vaso->get_type() == SMALL){
+    //               fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
+    //           }else if (vaso->get_type() == MEDIUM){
+    //               fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
+    //           }else{
+    //               fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
+    //           }
+    //
+    //           if (Especialista::is_free()){
+    //               fila_prepara_form.uses.esp = Especialista::get_free();
+    //               fila_prepara_form.uses.esp->set_situation(state_esp::ACTIVE_ESP);
+    //               fila_prepara_form.uses.esp->set_time_ociosity(SM_time_simulation-fila_prepara_form.uses.esp->get_start_ociosity());
+    //           }else{
+    //               fila_prepara_form.uses.art = Artesao::get_free();
+    //               fila_prepara_form.uses.art->set_situation(state_art::ACTIVE_ART);
+    //               fila_prepara_form.uses.art->set_time_ociosity(SM_time_simulation-fila_prepara_form.uses.art->get_start_ociosity());
+    //           }
+    //
+    //           fila_prepara_form.funct_event = &form_preparation;
+    //           fila_prepara_form.uses.vaso   = vaso;
+    //           insert_list_event(fila_prepara_form);
+    //        }
+    //   }
+    times_triangular_t times;
+    if (Artesao::is_free()){
+        if (SM_massa <= PORC_NIVEL_MASSA){
+            event_t prep_massa = new_event;
+            /* Tempo para fazer massa */
+            times.time_min  = 10;
+            times.time_mode = 20;
+            times.time_max  = 30;
+            prep_massa.time_event += trand(times);
+            prep_massa.funct_event = &preparation_massa;
+            prep_massa.uses.vaso   = NULL;
+            prep_massa.uses.art    = Artesao::get_free();
+            prep_massa.uses.art->set_situation(state_art::ACTIVE_ART);
+            prep_massa.uses.art->set_time_ociosity(SM_time_simulation-prep_massa.uses.art->get_start_ociosity());
+            insert_list_event(prep_massa);
+            goto SECAGEM_FINAL;
 
-              if (vaso->get_type() == SMALL){
-                  fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
-              }else if (vaso->get_type() == MEDIUM){
-                  fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
-              }else{
-                  fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
-              }
+        }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+            event_t prep_pedra = new_event;
+            /* Tempo para fazer pedras*/
+            times.time_min  = 10;
+            times.time_mode = 20;
+            times.time_max  = 30;
+            prep_pedra.time_event += trand(times);
+            prep_pedra.funct_event = &preparation_pedras;
+            prep_pedra.uses.vaso   = NULL;
+            prep_pedra.uses.art    = Artesao::get_free();
+            prep_pedra.uses.art->set_situation(state_art::ACTIVE_ART);
+            prep_pedra.uses.art->set_time_ociosity(SM_time_simulation-prep_pedra.uses.art->get_start_ociosity());
+            insert_list_event(prep_pedra);
+            goto SECAGEM_FINAL;
 
-              if (Especialista::is_free()){
-                  fila_prepara_form.uses.esp = Especialista::get_free();
-              }else{
-                  fila_prepara_form.uses.art = Artesao::get_free();
-              }
+        }else if (SM_queue_vasos[ENV_GERAL].size()){
+            event_t fila_env_geral = new_event;
+            Vaso* vaso = SM_queue_vasos[ENV_GERAL].front();
+            SM_queue_vasos[ENV_GERAL].pop_front();
+            vaso->set_queue((SM_time_simulation-vaso->get_queue(ENV_GERAL)), ENV_GERAL);
 
-              fila_prepara_form.funct_event = &form_preparation;
-              fila_prepara_form.uses.vaso   = vaso;
-              insert_list_event(fila_prepara_form);
-           }
-      }
+            if (vaso->get_type() == SMALL){
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-s"]);
+            }else if (vaso->get_type() == MEDIUM){
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-m"]);
+            }else{
+                fila_env_geral.time_event  += trand(SM_times_events["env_geral-b"]);
+            }
+
+            fila_env_geral.funct_event = &varnishing;
+            fila_env_geral.uses.vaso   = vaso;
+            fila_env_geral.uses.art    = Artesao::get_free();
+            fila_env_geral.uses.art->set_situation(state_art::ACTIVE_ART);
+            fila_env_geral.uses.art->set_time_ociosity(SM_time_simulation-fila_env_geral.uses.art->get_start_ociosity());
+            insert_list_event(fila_env_geral);
+            goto SECAGEM_FINAL;
+
+        }else if (SM_queue_vasos[IMP_INTER].size()){
+            event_t fila_imp_inter = new_event;
+            Vaso* vaso = SM_queue_vasos[IMP_INTER].front();
+            SM_queue_vasos[IMP_INTER].pop_front();
+            vaso->set_queue((SM_time_simulation-vaso->get_queue(IMP_INTER)), IMP_INTER);
+
+            if (vaso->get_type() == SMALL){
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-s"]);
+            }else if (vaso->get_type() == MEDIUM){
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-m"]);
+            }else{
+                fila_imp_inter.time_event  += trand(SM_times_events["imp_interna-b"]);
+            }
+
+            fila_imp_inter.funct_event = &inter_waterpoofing;
+            fila_imp_inter.uses.vaso   = vaso;
+            fila_imp_inter.uses.art    = Artesao::get_free();
+            fila_imp_inter.uses.art->set_situation(state_art::ACTIVE_ART);
+            fila_imp_inter.uses.art->set_time_ociosity(SM_time_simulation-fila_imp_inter.uses.art->get_start_ociosity());
+            insert_list_event(fila_imp_inter);
+            goto SECAGEM_FINAL;
+        }else if (SM_queue_vasos[LIMP_ACAB_BOCA].size()){
+            event_t fila_limp_acab_boca = new_event;
+            Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BOCA].front();
+            SM_queue_vasos[LIMP_ACAB_BOCA].pop_front();
+            vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BOCA)), LIMP_ACAB_BOCA);
+
+            if (vaso->get_type() == SMALL){
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
+            }else if (vaso->get_type() == MEDIUM){
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
+            }else{
+                fila_limp_acab_boca.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
+            }
+
+            fila_limp_acab_boca.funct_event = &mount_clearing;
+            fila_limp_acab_boca.uses.vaso   = vaso;
+            fila_limp_acab_boca.uses.art    = Artesao::get_free();
+            fila_limp_acab_boca.uses.art->set_situation(state_art::ACTIVE_ART);
+            fila_limp_acab_boca.uses.art->set_time_ociosity(SM_time_simulation-fila_limp_acab_boca.uses.art->get_start_ociosity());
+            insert_list_event(fila_limp_acab_boca);
+            goto SECAGEM_FINAL;
+        }
+    }
+    if (Artesao::is_free()||Especialista::is_free())
+      if (SM_queue_vasos[PREP_BOCA].size()){
+        event_t fila_prep_boca = new_event;
+        Vaso* vaso = SM_queue_vasos[PREP_BOCA].front();
+        SM_queue_vasos[PREP_BOCA].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(PREP_BOCA)), PREP_BOCA);
+
+        if (vaso->get_type() == SMALL){
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-m"]);
+        }else{
+            fila_prep_boca.time_event  += trand(SM_times_events["prep_boca-b"]);
+        }
+
+        fila_prep_boca.funct_event = &mouth_preparation;
+        fila_prep_boca.uses.vaso   = vaso;
+        if (Especialista::is_free()){
+            fila_prep_boca.uses.esp = Especialista::get_free();
+            fila_prep_boca.uses.esp->set_situation(state_esp::ACTIVE_ESP);
+            fila_prep_boca.uses.esp->set_time_ociosity(SM_time_simulation-fila_prep_boca.uses.esp->get_start_ociosity());
+        }else{
+            fila_prep_boca.uses.art = Artesao::get_free();
+            fila_prep_boca.uses.art->set_situation(state_art::ACTIVE_ART);
+            fila_prep_boca.uses.art->set_time_ociosity(SM_time_simulation-fila_prep_boca.uses.art->get_start_ociosity());
+        }
+        insert_list_event(fila_prep_boca);
+
+    }else if (SM_queue_vasos[LIMP_ACAB_BASE].size()){
+        event_t fila_limp_acab_base = new_event;
+        Vaso* vaso = SM_queue_vasos[LIMP_ACAB_BASE].front();
+        SM_queue_vasos[LIMP_ACAB_BASE].pop_front();
+        vaso->set_queue((SM_time_simulation-vaso->get_queue(LIMP_ACAB_BASE)), LIMP_ACAB_BASE);
+
+        if (vaso->get_type() == SMALL){
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
+        }else if (vaso->get_type() == MEDIUM){
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
+        }else{
+            fila_limp_acab_base.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
+        }
+
+        fila_limp_acab_base.funct_event = &base_clearing;
+        fila_limp_acab_base.uses.vaso   = vaso;
+        if (Especialista::is_free()){
+            fila_limp_acab_base.uses.esp = Especialista::get_free();
+            fila_limp_acab_base.uses.esp->set_situation(state_esp::ACTIVE_ESP);
+            fila_limp_acab_base.uses.esp->set_time_ociosity(SM_time_simulation-fila_limp_acab_base.uses.esp->get_start_ociosity());
+        }else{
+            fila_limp_acab_base.uses.art = Artesao::get_free();
+            fila_limp_acab_base.uses.art->set_situation(state_art::ACTIVE_ART);
+            fila_limp_acab_base.uses.art->set_time_ociosity(SM_time_simulation-fila_limp_acab_base.uses.art->get_start_ociosity());
+        }
+        insert_list_event(fila_limp_acab_base);
+
+    }else if (SM_queue_vasos[PREPARA_FORM].size()){
+      Vaso* vaso = SM_queue_vasos[PREPARA_FORM].front();
+      if (SM_massa   >= vaso->get_quatd_massa())
+       if (SM_pedra >= vaso->get_quatd_pedra())
+        if (SM_espaco_secagem >= vaso->get_quatd_espace()){
+          SM_espaco_secagem -= vaso->get_quatd_espace();
+          SM_massa          -= vaso->get_quatd_massa();
+          SM_pedra          -= vaso->get_quatd_pedra();
+          event_t fila_prepara_form = new_event;
+          SM_queue_vasos[PREPARA_FORM].pop_front();
+          vaso->set_queue((SM_time_simulation-vaso->get_queue(PREPARA_FORM)), PREPARA_FORM);
+
+          if (vaso->get_type() == SMALL){
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-s"]);
+          }else if (vaso->get_type() == MEDIUM){
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-m"]);
+          }else{
+              fila_prepara_form.time_event  += trand(SM_times_events["prep_form-b"]);
+          }
+
+          fila_prepara_form.funct_event = &form_preparation;
+          fila_prepara_form.uses.vaso   = vaso;
+          if (Especialista::is_free()){
+              fila_prepara_form.uses.esp = Especialista::get_free();
+              fila_prepara_form.uses.esp->set_situation(state_esp::ACTIVE_ESP);
+              fila_prepara_form.uses.esp->set_time_ociosity(SM_time_simulation-fila_prepara_form.uses.esp->get_start_ociosity());
+          }else{
+              fila_prepara_form.uses.art = Artesao::get_free();
+              fila_prepara_form.uses.art->set_situation(state_art::ACTIVE_ART);
+              fila_prepara_form.uses.art->set_time_ociosity(SM_time_simulation-fila_prepara_form.uses.art->get_start_ociosity());
+          }
+          insert_list_event(fila_prepara_form);
+       }
+    }
+
+SECAGEM_FINAL:
+
     new_event.uses.vaso->set_end_time(SM_time_simulation);
     SM_vaso_finish.push_back(new_event.uses.vaso);
 }

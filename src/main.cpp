@@ -21,10 +21,24 @@ int main(int argc, char* argv[]){
 
     std::cout << '\n';
 
+    for (Artesao* artesao: SM_Artesao) {
+        printf("Artesao ID: %d, ociosidade: %ld\n", artesao->get_id(), artesao->get_time_ociosity());
+    }
+
+    std::cout << '\n';
+
+    for (Especialista* especialista: SM_Especialista) {
+        printf("Especialista ID: %d, ociosidade: %ld\n", especialista->get_id(), especialista->get_time_ociosity());
+    }
+
+    std::cout << '\n';
+
     std::cout << "Time atual: "        << SM_time_simulation      << '\n';
     std::cout << "Time Final: "        << SM_final_time_simulation << '\n';
+    std::cout << '\n';
     std::cout << "Vasos Gerados: "     << last_id_vaso            << '\n';
     std::cout << "Vasos Finalizados: " << SM_vaso_finish.size()    << '\n';
+    std::cout << '\n';
     printf("Massa: %d, Pedra: %d, Espaço: %d\n", SM_massa, SM_pedra, SM_espaco_secagem);
     return 0;
 }

@@ -19,17 +19,28 @@ using namespace std;
 void start_simulation(){
 
   for (u_int16_t i = 0; i < SM_quatd_art; i++) {
-      Artesao artesao;
-      artesao.add_art();
+      Artesao* artesao = new Artesao;
+      artesao->add_art();
   }
 
   for (u_int16_t i = 0; i < SM_quatd_esp; i++) {
-      Especialista especialista;
-      especialista.add_esp();
+      Especialista* especialista = new Especialista;
+      especialista->add_esp();
   }
 
   init_simulation();
   while ((SM_list_event_simulation)&&(SM_time_simulation <= SM_final_time_simulation)){
       SM_list_event_simulation[0].event.funct_event();
   }
+
+  for (Artesao* artesao: SM_Artesao){
+      if (artesao->get_situation()==state_art::OCIOSITY_ART)
+          artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
+  }
+
+  for (Especialista* especialista: SM_Especialista){
+      if (especialista->get_situation()==state_esp::OCIOSITY_ESP)
+          especialista->set_time_ociosity(SM_time_simulation-especialista->get_start_ociosity());
+  }
+
 }
