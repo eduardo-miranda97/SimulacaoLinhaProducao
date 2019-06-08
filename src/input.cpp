@@ -64,7 +64,7 @@ void set_parameters(const vector<string>& tokens){
 		          SM_quatd_art = stoul(tokens[2]);
 					}else if (tokens[1].compare("num_esp")==0){
 		          SM_quatd_esp = stoul(tokens[2]);
-					}else if (tokens[1].compare("qtd_mass")==0){
+					}else if (tokens[1].compare("qtd_massa")==0){
 		          SM_massa = stoul(tokens[2]);
 					}else if (tokens[1].compare("qtd_massa_max")==0){
 		          SM_massa_MAX = stoul(tokens[2]);
