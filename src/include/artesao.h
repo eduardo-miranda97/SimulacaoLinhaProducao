@@ -1,18 +1,13 @@
 #ifndef ARTES
 #define  ARTES
-class Artesao;
 
-#ifndef ERRO_MEMORY_ACESS
-#define  ERRO_MEMORY_ACESS        2
-#endif
-
-#include <iostream>
 #include <cstdlib>
 #include <list>
 
+class Artesao;
 
 extern std::list<Artesao*> SM_Artesao;
-extern u_int16_t  last_id_arts;
+extern u_int16_t           last_id_arts;
 
 enum state_art{
     OCIOSITY_ART=0, ACTIVE_ART
@@ -35,6 +30,7 @@ class Artesao{
     state_art get_situation();
     u_int32_t get_time_ociosity ();
     u_int32_t get_start_ociosity();
+
   private:
     u_int8_t  id;               // ID do Artesão.
     state_art situation;        // Situação do Artesão.

@@ -1,19 +1,13 @@
 #ifndef ESPEC
 #define  ESPEC
 
-#ifndef ERRO_MEMORY_ACESS
-#define  ERRO_MEMORY_ACESS        2
-#endif
-
-class Especialista;
-
-#include <iostream>
 #include <cstdlib>
 #include <list>
 
+class Especialista;
 
 extern std::list<Especialista*> SM_Especialista;
-extern u_int16_t           last_id_espec;
+extern u_int16_t                last_id_espec;
 
 enum state_esp{
     OCIOSITY_ESP=0, ACTIVE_ESP
@@ -36,6 +30,7 @@ class Especialista{
     state_esp get_situation();
     u_int32_t get_time_ociosity ();
     u_int32_t get_start_ociosity();
+
   private:
     u_int8_t  id;
     state_esp situation;

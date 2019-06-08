@@ -13,18 +13,18 @@
 
 /* Struct para armazenar os numeros da distribuição aleatoria triangular */
 typedef struct{
-    float  time_min;
-    float  time_mode;
-    float  time_max;
+    double  time_min;
+    double  time_mode;
+    double  time_max;
 }times_triangular_t;
 
 /* Função que gera numeros aleatorios com distribuição triangular */
-float trand(times_triangular_t times);
+double trand(times_triangular_t times);
 
 /* Calcula parte crescente da triangular*/
-float tcresc(float start, float end, float ponto);
+double tcresc(double start, double end, double ponto);
 
 /* Calcula parte decrescente da triangular*/
-float tdecre(float start, float end, float ponto);
+double tdecre(double start, double end, double ponto);
 
 #endif //TRIANGULAR

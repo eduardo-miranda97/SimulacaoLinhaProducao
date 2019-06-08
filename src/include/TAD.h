@@ -1,14 +1,9 @@
 #ifndef TAD
 #define  TAD
 
-#include <cstdlib>
-#include <iostream>
-
 #include "vaso.h"
 #include "especialista.h"
 #include "artesao.h"
-
-#define ERROR_MEMORY_ALLOC 2
 
 /* IDs dos objetos usados no evento */
 typedef struct{
@@ -18,7 +13,6 @@ typedef struct{
 }utils;
 
 /* Descrição do evento */
-
 typedef struct{
     double  time_event;
     void    (*funct_event)();
@@ -27,7 +21,6 @@ typedef struct{
 
 
 /* Estrutura de dados de uma fila, celula definida a baixo */
-
 typedef struct queue event_list_t;
 struct queue{
     event_t       event;
@@ -42,7 +35,7 @@ extern Vaso*         filas[QUEUE_WAIT];
 
 /*==========================================================================*/
 
-void insert_list_event(event_t event);
-void remove_list_event(event_list_t* event);
+void insert_list_event (event_t       event);
+void remove_list_event (event_list_t* event);
 
 #endif

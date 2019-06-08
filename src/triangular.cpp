@@ -1,10 +1,17 @@
 #include "./include/triangular.h"
 
-float trand(times_triangular_t times){
-    float y, range, prob;
+double trand(times_triangular_t times){
+    if ((times.time_min>times.time_mode)||(times.time_max<times.time_mode)){
+        std::cout << '\n' << "[ERRO] Entrada para trand() com valores invalidos" << '\n';
+        exit(ERRO_CALC);
+    }
+    if (times.time_min==times.time_max){
+        return times.time_min;
+    }
+    double y, range, prob;
     do{
         range = ((rand()%((int)(times.time_max-times.time_min+1)))+times.time_min);
-        prob  = ((float) rand()/RAND_MAX);
+        prob  = ((double) rand()/RAND_MAX);
         if (range <= times.time_mode){
             y = tcresc(times.time_min, times.time_mode, range);
         }else{
@@ -14,22 +21,20 @@ float trand(times_triangular_t times){
     return range;
 }
 
-float tcresc(float start, float end, float ponto){
+double tcresc(double start, double end, double ponto){
     if (start == end){
-        printf("\n\n[ERROR] Entrada para tcresc(), devem ser diferentes !\n\n");
-        exit(ERRO_CALC);
+        return start;
     }
-    float a = ((AMPLITUDE_MAX-AMPLITUDE_MIN)/(end-start));
-    float b = (((AMPLITUDE_MIN*end)-(AMPLITUDE_MAX*start))/(end-start));
+    double a = ((AMPLITUDE_MAX-AMPLITUDE_MIN)/(end-start));
+    double b = (((AMPLITUDE_MIN*end)-(AMPLITUDE_MAX*start))/(end-start));
     return (a*ponto+b);
 }
 
-float tdecre(float start, float end, float ponto){
+double tdecre(double start, double end, double ponto){
     if (start == end){
-        printf("\n\n[ERROR] Entrada para tdecre(), devem ser diferentes !\n\n");
-        exit(ERRO_CALC);
+        return start;
     }
-    float a = ((AMPLITUDE_MIN-AMPLITUDE_MAX)/(end-start));
-    float b = (((AMPLITUDE_MAX*end)-(AMPLITUDE_MIN*start))/(end-start));
+    double a = ((AMPLITUDE_MIN-AMPLITUDE_MAX)/(end-start));
+    double b = (((AMPLITUDE_MAX*end)-(AMPLITUDE_MIN*start))/(end-start));
     return (a*ponto+b);
 }

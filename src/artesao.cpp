@@ -1,9 +1,7 @@
 #include "./include/artesao.h"
 
-u_int8_t  SM_quatd_Art = 0;
 std::list<Artesao*> SM_Artesao;
-u_int16_t last_id_arts = 0;
-
+u_int16_t           last_id_arts = 0;
 
 /* STATIC METHODS */
 void Artesao::add_art(){

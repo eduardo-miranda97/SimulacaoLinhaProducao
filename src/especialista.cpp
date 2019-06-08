@@ -1,7 +1,7 @@
 #include "./include/especialista.h"
 
  std::list<Especialista*> SM_Especialista;
- u_int16_t                last_id_espec   = 0;
+ u_int16_t                last_id_espec = 0;
 
 /* STATIC METHODS */
 void Especialista::add_esp(){
