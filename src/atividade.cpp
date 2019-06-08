@@ -104,8 +104,8 @@ void base_preparation(){
     insert_list_event(new_event);
 }
 
-#define  PORC_NIVEL_MASSA         (0.2*SM_massa_MAX)
-#define  PORC_NIVEL_PEDRA         (0.2*SM_pedra_MAX)
+#define  PORC_NIVEL_MASSA         (0.35*SM_massa_MAX)
+#define  PORC_NIVEL_PEDRA         (0.35*SM_pedra_MAX)
 void base_set_init(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
