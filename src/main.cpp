@@ -15,6 +15,8 @@ int main(int argc, char* argv[]){
     input_args(argv[1]);
     start_simulation();
 
+    std::cout << '\n';
+    
     for (int i=0; i < QUEUE_WAIT; i++){
         printf("Fila [%d] = %ld\n", i, SM_queue_vasos[i].size());
     }
@@ -39,6 +41,6 @@ int main(int argc, char* argv[]){
     std::cout << "Vasos Gerados: "     << last_id_vaso            << '\n';
     std::cout << "Vasos Finalizados: " << SM_vaso_finish.size()    << '\n';
     std::cout << '\n';
-    printf("Massa: %d, Pedra: %d, Espaço: %d\n", SM_massa, SM_pedra, SM_espaco_secagem);
+    printf("Massa: %d, Pedra: %d, Espaço: %d\n\n", SM_massa, SM_pedra, SM_espaco_secagem);
     return 0;
 }
