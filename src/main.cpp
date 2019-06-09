@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
     start_simulation();
 
     std::cout << '\n';
-    
+
     for (int i=0; i < QUEUE_WAIT; i++){
         printf("Fila [%d] = %ld\n", i, SM_queue_vasos[i].size());
     }
@@ -35,8 +35,8 @@ int main(int argc, char* argv[]){
 
     std::cout << '\n';
 
-    std::cout << "Time atual: "        << SM_time_simulation      << '\n';
     std::cout << "Time Final: "        << SM_final_time_simulation << '\n';
+    std::cout << "Time atual: "        << SM_time_simulation      << '\n';
     std::cout << '\n';
     std::cout << "Vasos Gerados: "     << last_id_vaso            << '\n';
     std::cout << "Vasos Finalizados: " << SM_vaso_finish.size()    << '\n';
