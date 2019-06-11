@@ -3,14 +3,20 @@
 #define DAYINMINUTES             (24*60)
 
 void init_simulation(){
-    double start_time = 0;
+    double  start_time;
     event_t event;
+    event.uses.vaso = NULL;
+    event.uses.art  = NULL;
+    event.uses.esp  = NULL;
+    // for (start_time = 8;start_time < SM_final_time_simulation; start_time += 24){
+    //     event.time_event  = start_time;
+    //     event.funct_event = &new_day;
+    //     insert_list_event(event);
+    // }
+    start_time = 0;
+    event.funct_event = &begin_requets;
     do{
-        event.time_event  = start_time;
-        event.funct_event = &begin_requets;
-        event.uses.vaso   = NULL;
-        event.uses.art    = NULL;
-        event.uses.esp    = NULL;
+        event.time_event = start_time;
         insert_list_event(event);
         u_int8_t quatd_pedidos = trand(SM_quatd_pedidos);
         start_time            += (quatd_pedidos*DAYINMINUTES);
@@ -1816,5 +1822,33 @@ void preparation_pedras(){
     if (flag){
             new_event.uses.art->set_situation(state_art::OCIOSITY_ART);
             new_event.uses.art->set_start_ociosity(SM_time_simulation);
+    }
+}
+
+void new_day(){
+    SM_time_simulation = SM_list_event_simulation[0].event.time_event;
+    remove_list_event(&(SM_list_event_simulation[0]));
+
+    event_list_t* list = SM_list_event_simulation;
+    while (list->next_event)
+        if (list->event.time_event < (SM_time_simulation+16)){
+            list = list->next_event;
+        }else{
+            list = list->prev_event;
+            break;
+        }
+
+
+    while (list){
+        event_list_t* prev_list = list->prev_event;
+        if ((list->event.funct_event != &varnishing)     || (list->event.funct_event != &inter_waterpoofing) ||
+            (list->event.funct_event != &mount_clearing) || (list->event.funct_event != &mouth_set_init)    ||
+            (list->event.funct_event != &base_set_init)){
+                list->event.time_event += (SM_time_simulation+16);
+                event_t new_event = list->event;
+                remove_list_event(list);
+                insert_list_event(new_event);
+        }
+        list = prev_list;
     }
 }

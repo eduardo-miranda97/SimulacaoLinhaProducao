@@ -46,4 +46,7 @@ void preparation_massa();   // EVENTO  := 'PREPARA_MASSA'
 
 void preparation_pedras();  // EVENTO  := 'PREPARA_PEDRA'
 
+
+void new_day();
+
 #endif
