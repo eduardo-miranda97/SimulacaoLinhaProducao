@@ -1,7 +1,6 @@
 #include "./include/TAD.h"
 
 event_list_t* SM_list_event_simulation = NULL;
-Vaso*         filas[QUEUE_WAIT];
 
 void insert_list_event(event_t event){
     if (!SM_list_event_simulation){

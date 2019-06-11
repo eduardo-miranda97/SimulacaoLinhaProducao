@@ -31,7 +31,6 @@ struct queue{
 /*==========================================================================*/
 
 extern event_list_t* SM_list_event_simulation; /* Fila de eventos */
-extern Vaso*         filas[QUEUE_WAIT];
 
 /*==========================================================================*/
 
