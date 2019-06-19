@@ -72,6 +72,10 @@ void set_parameters(const vector<string>& tokens){
 		          SM_pedra = stoul(tokens[2]);
 					}else if (tokens[1].compare("qtd_pedra_max")==0){
 		          SM_pedra_MAX = stoul(tokens[2]);
+					}else if (tokens[1].compare("qtd_massa_min")==0){
+		          SM_massa_MIN = atof(tokens[2].c_str());
+					}else if (tokens[1].compare("qtd_pedra_min")==0){
+		          SM_pedra_MIN = atof(tokens[2].c_str());
 					}else{
 							printf("\n================================================================================\n");
 							printf("\n[ERRO] Entrada de argumentos via arquivo, token %s\n", tokens[1].c_str());
