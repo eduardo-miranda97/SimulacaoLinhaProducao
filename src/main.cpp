@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
     input_args(argv[1]);
     start_simulation();
 
-    if (0){
+    if (1){
         std::cout << '\n';
 
         for (int i=0; i < QUEUE_WAIT; i++){
@@ -24,13 +24,13 @@ int main(int argc, char* argv[]){
         std::cout << '\n';
 
         for (Artesao* artesao: SM_Artesao) {
-            printf("Artesao ID: %4u \tociosidade: %5ld\n", artesao->get_id(), artesao->get_time_ociosity());
+            printf("Artesao ID: %4u \tociosidade: %5d\n", artesao->get_id(), artesao->get_time_ociosity());
         }
 
         std::cout << '\n';
 
         for (Especialista* especialista: SM_Especialista) {
-            printf("Especialista ID: %4u\t  ociosidade: %5ld\n", especialista->get_id(), especialista->get_time_ociosity());
+            printf("Especialista ID: %4u\t  ociosidade: %5d\n", especialista->get_id(), especialista->get_time_ociosity());
         }
 
         std::cout << '\n';
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]){
         exit(ERRO_INPUT_FILE);
     }
 
-    fprintf(result_file, "%.2lf\t%lu\t%lu\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%d\n", SM_time_simulation, SM_massa_usado, SM_pedra_usado, produt_art,
+    fprintf(result_file, "%.2lf\t%u\t%u\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%ld\n", SM_time_simulation, SM_massa_usado, SM_pedra_usado, produt_art,
                         produt_esp, ociosidade_art, ociosidade_esp, stoul(argv[3]));
 
     fclose(result_file);
