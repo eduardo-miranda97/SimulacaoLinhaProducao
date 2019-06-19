@@ -159,8 +159,6 @@ void base_preparation(){
     insert_list_event(new_event);
 }
 
-#define  PORC_NIVEL_MASSA         (0.35*SM_massa_MAX)
-#define  PORC_NIVEL_PEDRA         (0.35*SM_pedra_MAX)
 void base_set_init(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
@@ -170,17 +168,12 @@ void base_set_init(){
         file_log << std::endl << "PREPARA_ACAB_BASE TIME: " << SM_time_simulation << std::endl;
     #endif
 
-    times_triangular_t times;
     bool flag = true;
     if (new_event.uses.art){
-        if (SM_massa <= PORC_NIVEL_MASSA){
+        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
             flag = false;
             event_t prep_massa = new_event;
-            /* Tempo para fazer massa */
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_massa.time_event += trand(times);
+            prep_massa.time_event += trand(SM_times_events["prep_massa"]);
             prep_massa.funct_event = &preparation_massa;
             prep_massa.uses.vaso   = NULL;
             insert_list_event(prep_massa);
@@ -190,14 +183,10 @@ void base_set_init(){
             #endif
             goto SEC_ACAB_BASE_LABEL;
 
-        }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
             flag = false;
             event_t prep_pedra = new_event;
-            /* Tempo para fazer pedras*/
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_pedra.time_event += trand(times);
+            prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
             prep_pedra.funct_event = &preparation_pedras;
             prep_pedra.uses.vaso   = NULL;
             insert_list_event(prep_pedra);
@@ -497,17 +486,12 @@ void base_clearing(){
     #if LOG
         file_log << std::endl << "LIMP_BASE TIME: " << SM_time_simulation << std::endl;
     #endif
-    times_triangular_t times;
     bool flag = true;
     if (new_event.uses.art){
-        if (SM_massa <= PORC_NIVEL_MASSA){
+        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
             flag = false;
             event_t prep_massa = new_event;
-            /* Tempo para fazer massa */
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_massa.time_event += trand(times);
+            prep_massa.time_event += trand(SM_times_events["prep_massa"]);
             prep_massa.funct_event = &preparation_massa;
             prep_massa.uses.vaso   = NULL;
             insert_list_event(prep_massa);
@@ -517,14 +501,10 @@ void base_clearing(){
             #endif
             goto LIMP_BASE;
 
-        }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
             flag = false;
             event_t prep_pedra = new_event;
-            /* Tempo para fazer pedras*/
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_pedra.time_event += trand(times);
+            prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
             prep_pedra.funct_event = &preparation_pedras;
             prep_pedra.uses.vaso   = NULL;
             insert_list_event(prep_pedra);
@@ -839,17 +819,12 @@ void mouth_set_init(){
         file_log << std::endl << "PREPARA_ACAB_BOCA TIME: " << SM_time_simulation << std::endl;
     #endif
 
-    times_triangular_t times;
     bool flag = true;
     if (new_event.uses.art){
-        if (SM_massa <= PORC_NIVEL_MASSA){
+        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
             flag = false;
             event_t prep_massa = new_event;
-            /* Tempo para fazer massa */
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_massa.time_event += trand(times);
+            prep_massa.time_event += trand(SM_times_events["prep_massa"]);
             prep_massa.funct_event = &preparation_massa;
             prep_massa.uses.vaso   = NULL;
             insert_list_event(prep_massa);
@@ -859,14 +834,10 @@ void mouth_set_init(){
             #endif
             goto ACAB_INICIAL_BOCA;
 
-        }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
             flag = false;
             event_t prep_pedra = new_event;
-            /* Tempo para fazer pedras*/
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_pedra.time_event += trand(times);
+            prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
             prep_pedra.funct_event = &preparation_pedras;
             prep_pedra.uses.vaso   = NULL;
             insert_list_event(prep_pedra);
@@ -1157,17 +1128,12 @@ void mount_clearing(){
         file_log << std::endl << "LIMP_BOCA TIME: " << SM_time_simulation << std::endl;
     #endif
 
-    times_triangular_t times;
     bool flag = true;
     if (new_event.uses.art){
-        if (SM_massa <= PORC_NIVEL_MASSA){
+        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
             flag = false;
             event_t prep_massa = new_event;
-            /* Tempo para fazer massa */
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_massa.time_event += trand(times);
+            prep_massa.time_event += trand(SM_times_events["prep_massa"]);
             prep_massa.funct_event = &preparation_massa;
             prep_massa.uses.vaso   = NULL;
             insert_list_event(prep_massa);
@@ -1177,14 +1143,10 @@ void mount_clearing(){
             #endif
             goto LIMP_BOCA;
 
-        }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
             flag = false;
             event_t prep_pedra = new_event;
-            /* Tempo para fazer pedras*/
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_pedra.time_event += trand(times);
+            prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
             prep_pedra.funct_event = &preparation_pedras;
             prep_pedra.uses.vaso   = NULL;
             insert_list_event(prep_pedra);
@@ -1463,16 +1425,11 @@ void inter_waterpoofing(){
         file_log << std::endl << "PREPARA_ACAB_BASE TIME: " << SM_time_simulation << std::endl;
     #endif
 
-    times_triangular_t times;
     bool flag = true;
-    if (SM_massa <= PORC_NIVEL_MASSA){
+    if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
         flag = false;
         event_t prep_massa = new_event;
-        /* Tempo para fazer massa */
-        times.time_min  = 10;
-        times.time_mode = 20;
-        times.time_max  = 30;
-        prep_massa.time_event += trand(times);
+        prep_massa.time_event += trand(SM_times_events["prep_massa"]);
         prep_massa.funct_event = &preparation_massa;
         prep_massa.uses.vaso   = NULL;
         #if LOG
@@ -1481,14 +1438,10 @@ void inter_waterpoofing(){
         #endif
         insert_list_event(prep_massa);
 
-    }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+    }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
         flag = false;
         event_t prep_pedra = new_event;
-        /* Tempo para fazer pedras*/
-        times.time_min  = 10;
-        times.time_mode = 20;
-        times.time_max  = 30;
-        prep_pedra.time_event += trand(times);
+        prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
         prep_pedra.funct_event = &preparation_pedras;
         prep_pedra.uses.vaso   = NULL;
         #if LOG
@@ -1747,17 +1700,12 @@ void varnishing(){
     SM_time_simulation = SM_list_event_simulation[0].event.time_event;
     event_t new_event  = SM_list_event_simulation[0].event;
     remove_list_event(&(SM_list_event_simulation[0]));
-    times_triangular_t times;
 
     bool flag = true;
-    if (SM_massa <= PORC_NIVEL_MASSA){
+    if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
         flag = false;
         event_t prep_massa = new_event;
-        /* Tempo para fazer massa */
-        times.time_min  = 10;
-        times.time_mode = 20;
-        times.time_max  = 30;
-        prep_massa.time_event += trand(times);
+        prep_massa.time_event += trand(SM_times_events["prep_massa"]);
         prep_massa.funct_event = &preparation_massa;
         prep_massa.uses.vaso   = NULL;
         #if LOG
@@ -1766,14 +1714,10 @@ void varnishing(){
         #endif
         insert_list_event(prep_massa);
 
-    }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+    }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
         flag = false;
         event_t prep_pedra = new_event;
-        /* Tempo para fazer pedras*/
-        times.time_min  = 10;
-        times.time_mode = 20;
-        times.time_max  = 30;
-        prep_pedra.time_event += trand(times);
+        prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
         prep_pedra.funct_event = &preparation_pedras;
         prep_pedra.uses.vaso   = NULL;
         #if LOG
@@ -2000,15 +1944,10 @@ void final_drying(){
 
     SM_espaco_secagem += new_event.uses.vaso->get_quatd_espace();
 
-    times_triangular_t times;
     if (Artesao::is_free()){
-        if (SM_massa <= PORC_NIVEL_MASSA){
+        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
             event_t prep_massa = new_event;
-            /* Tempo para fazer massa */
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_massa.time_event += trand(times);
+            prep_massa.time_event += trand(SM_times_events["prep_massa"]);
             prep_massa.funct_event = &preparation_massa;
             prep_massa.uses.vaso   = NULL;
             prep_massa.uses.art    = Artesao::get_free();
@@ -2021,13 +1960,9 @@ void final_drying(){
             #endif
             goto SECAGEM_FINAL;
 
-        }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
             event_t prep_pedra = new_event;
-            /* Tempo para fazer pedras*/
-            times.time_min  = 10;
-            times.time_mode = 20;
-            times.time_max  = 30;
-            prep_pedra.time_event += trand(times);
+            prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
             prep_pedra.funct_event = &preparation_pedras;
             prep_pedra.uses.vaso   = NULL;
             prep_pedra.uses.art    = Artesao::get_free();
@@ -2271,16 +2206,11 @@ void preparation_massa(){
     #endif
 
     bool flag = true;
-    times_triangular_t times;
     SM_massa = SM_massa_MAX;
-    if (SM_massa <= PORC_NIVEL_MASSA){
+    if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
         flag = false;
         event_t prep_massa = new_event;
-        /* Tempo para fazer massa */
-        times.time_min  = 10;
-        times.time_mode = 20;
-        times.time_max  = 30;
-        prep_massa.time_event += trand(times);
+        prep_massa.time_event += trand(SM_times_events["prep_massa"]);
         prep_massa.funct_event = &preparation_massa;
         prep_massa.uses.vaso   = NULL;
         insert_list_event(prep_massa);
@@ -2288,14 +2218,10 @@ void preparation_massa(){
             file_log << std::endl << "SECAGEM_ACABAMENTO_BASE TIME: " << SM_time_simulation << std::endl;
         #endif
 
-    }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+    }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
         flag = false;
         event_t prep_pedra = new_event;
-        /* Tempo para fazer pedras*/
-        times.time_min  = 10;
-        times.time_mode = 20;
-        times.time_max  = 30;
-        prep_pedra.time_event += trand(times);
+        prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
         prep_pedra.funct_event = &preparation_pedras;
         prep_pedra.uses.vaso   = NULL;
         insert_list_event(prep_pedra);
@@ -2502,16 +2428,11 @@ void preparation_pedras(){
     #endif
 
     bool flag = true;
-    times_triangular_t times;
     SM_pedra = SM_pedra_MAX;
-    if (SM_massa <= PORC_NIVEL_MASSA){
+    if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
         flag = false;
         event_t prep_massa = new_event;
-        /* Tempo para fazer massa */
-        times.time_min  = 10;
-        times.time_mode = 20;
-        times.time_max  = 30;
-        prep_massa.time_event += trand(times);
+        prep_massa.time_event += trand(SM_times_events["prep_massa"]);
         prep_massa.funct_event = &preparation_massa;
         prep_massa.uses.vaso   = NULL;
         insert_list_event(prep_massa);
@@ -2520,14 +2441,10 @@ void preparation_pedras(){
                     << " TIME: " << prep_massa.time_event << std::endl;
         #endif
 
-    }else if (SM_pedra <= PORC_NIVEL_PEDRA){
+    }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
         flag = false;
         event_t prep_pedra = new_event;
-        /* Tempo para fazer pedras*/
-        times.time_min  = 10;
-        times.time_mode = 20;
-        times.time_max  = 30;
-        prep_pedra.time_event += trand(times);
+        prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
         prep_pedra.funct_event = &preparation_pedras;
         prep_pedra.uses.vaso   = NULL;
         insert_list_event(prep_pedra);
