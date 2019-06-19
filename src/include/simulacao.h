@@ -5,13 +5,15 @@
 #include <fstream>
 #include "atividade.h"
 
-#define LOG  false
+#define LOG  true
 
 extern std::map<std::string, times_triangular_t> SM_times_events;
 extern std::list<Vaso*>                          SM_vaso_finish;
 extern std::ofstream                             file_log;
 extern double                                    SM_time_simulation;
 extern double                                    SM_final_time_simulation;
+extern double                                    SM_massa_MIN;
+extern double                                    SM_pedra_MIN;
 extern u_int16_t                                 SM_massa;
 extern u_int16_t                                 SM_massa_MAX;
 extern u_int16_t                                 SM_massa_usado;
