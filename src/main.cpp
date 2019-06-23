@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
         std::cout << '\n';
 
         for (Vaso* vaso: SM_vaso_finish){
-            printf("Vaso ID: %4u\tTempo total: %5u\n", vaso->get_id(), vaso->get_end_time()-vaso->get_start_time());
+            printf("Vaso ID: %4u\tType: %c \tTempo total: %5u\n", vaso->get_id(), vaso->get_type(),vaso->get_end_time()-vaso->get_start_time());
         }
 
         std::cout << '\n';
@@ -75,7 +75,7 @@ int main(int argc, char* argv[]){
           printf("\n================================================================================\n");
           exit(ERRO_INPUT_FILE);
         }
-        fprintf(result_file, "TEMPO_TRABALHO\tUSO_MASSA\tUSO_PEDRA\tPROD_ART\tPROD_ESP\tOCIOSID_ART\tOCIOSID_ESP\tSEED\n");
+        fprintf(result_file, "TEMP_SIMULACAO\tUSO_MASSA\tUSO_PEDRA\tPROD_ART\tPROD_ESP\tOCIOSID_ART\tOCIOSID_ESP\tNUM_VASOS\tSEED\n");
     }else{
         result_file = fopen(argv[2], "a+");
     }
@@ -87,8 +87,8 @@ int main(int argc, char* argv[]){
         exit(ERRO_INPUT_FILE);
     }
 
-    fprintf(result_file, "%.2lf\t%u\t%u\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%ld\n", SM_time_simulation, SM_massa_usado, SM_pedra_usado, produt_art,
-                        produt_esp, ociosidade_art, ociosidade_esp, stoul(argv[3]));
+    fprintf(result_file, "%.2lf\t%u\t%u\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%ld\t%ld\n", SM_time_simulation, SM_massa_usado, SM_pedra_usado, produt_art,
+                        produt_esp, ociosidade_art, ociosidade_esp, SM_vaso_finish.size(), stoul(argv[3]));
 
     fclose(result_file);
     return 0;
