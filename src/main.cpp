@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
     input_args(argv[1]);
     start_simulation();
 
-    if (1){
+    if (0){
         std::cout << '\n';
 
         for (int i=0; i < QUEUE_WAIT; i++){
