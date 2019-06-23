@@ -2,17 +2,17 @@
 
 double               SM_final_time_simulation =   0;
 double               SM_time_simulation      =   0;
-double               SM_massa_MIN            = 0.4;
-double               SM_pedra_MIN            = 0.4;
-u_int16_t            SM_quatd_esp            =   2;
-u_int16_t            SM_quatd_art            =   2;
-u_int16_t            SM_massa                =  10;
-u_int16_t            SM_massa_MAX            =  10;
-u_int16_t            SM_pedra                =  10;
-u_int16_t            SM_pedra_MAX            =  10;
-u_int16_t            SM_espaco_secagem       =  10;
-u_int16_t            SM_pedra_usado          =   0;
-u_int16_t            SM_massa_usado          =   0;
+double               SM_massa_MIN            =   4;
+double               SM_pedra_MIN            =   4;
+double               SM_quatd_esp            =   2;
+double               SM_quatd_art            =   2;
+double               SM_massa                =  10;
+double               SM_massa_MAX            =  10;
+double               SM_pedra                =  10;
+double               SM_pedra_MAX            =  10;
+double               SM_espaco_secagem       =  10;
+double               SM_pedra_usado          =   0;
+double               SM_massa_usado          =   0;
 times_triangular_t   SM_quatd_vasos          = {20, 40, 60};
 times_triangular_t   SM_quatd_pedidos        = {21, 30, 37};
 std::map<std::string, times_triangular_t>    SM_times_events;
