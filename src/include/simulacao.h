@@ -5,7 +5,7 @@
 #include <fstream>
 #include "atividade.h"
 
-#define LOG  true
+#define LOG  false
 
 extern std::map<std::string, times_triangular_t> SM_times_events;
 extern std::list<Vaso*>                          SM_vaso_finish;
