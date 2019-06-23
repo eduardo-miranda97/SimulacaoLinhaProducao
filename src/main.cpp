@@ -47,7 +47,7 @@ int main(int argc, char* argv[]){
         std::cout << "Vasos Gerados:  \t"   << last_id_vaso            << '\n';
         std::cout << "Vasos Finalizados:\t" << SM_vaso_finish.size()    << '\n';
         std::cout << '\n';
-        printf("Massa: %u, Pedra: %u, Espaço: %u\n\n", SM_massa, SM_pedra, SM_espaco_secagem);
+        printf("Massa: %.2lf, Pedra: %.2lf, Espaço: %.2lf\n\n", SM_massa, SM_pedra, SM_espaco_secagem);
     }
     double ociosidade_art = 0;
     double ociosidade_esp = 0;
@@ -87,7 +87,7 @@ int main(int argc, char* argv[]){
         exit(ERRO_INPUT_FILE);
     }
 
-    fprintf(result_file, "%.2lf\t%u\t%u\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%ld\t%ld\n", SM_time_simulation, SM_massa_usado, SM_pedra_usado, produt_art,
+    fprintf(result_file, "%.2lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%.2lf\t%ld\t%ld\n", SM_time_simulation, SM_massa_usado, SM_pedra_usado, produt_art,
                         produt_esp, ociosidade_art, ociosidade_esp, SM_vaso_finish.size(), stoul(argv[3]));
 
     fclose(result_file);
