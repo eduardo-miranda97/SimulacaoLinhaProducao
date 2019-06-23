@@ -16,17 +16,17 @@
 
 #define QUEUE_WAIT              6
 
-#define MASSA_SMALL             1
-#define MASSA_MEDIAM            2
-#define MASSA_BIG               4
+extern double massa_small;
+extern double massa_median;
+extern double massa_big;
 
-#define PEDRA_SMALL             1
-#define PEDRA_MEDIAM            2
-#define PEDRA_BIG               4
+extern double pedra_small;
+extern double pedra_median;
+extern double pedra_big;
 
-#define SPACE_SMALL             1
-#define SPACE_MEDIAM            2
-#define SPACE_BIG               4
+extern double space_small;
+extern double space_median;
+extern double space_big;
 
 class Vaso;
 

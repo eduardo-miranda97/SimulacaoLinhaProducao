@@ -1,5 +1,16 @@
 #include "./include/vaso.h"
 
+double massa_small      = 1;
+double massa_median     = 2;
+double massa_big        = 4;
+
+double pedra_small      = 1;
+double pedra_median     = 2;
+double pedra_big        = 4;
+
+double space_small      = 1;
+double space_median     = 2;
+double space_big        = 4;
 
 float Vaso::prob_small   = 0.3;
 float Vaso::prob_medium  = 0.3;
@@ -30,26 +41,26 @@ u_int8_t Vaso::rand_type(){
 
 u_int8_t Vaso::get_quatd_espace(){
     if (this->type == SMALL)
-        return SPACE_SMALL;
+        return space_small;
     if (this->type == MEDIUM)
-        return SPACE_MEDIAM;
-    return     SPACE_BIG;
+        return space_median;
+    return     space_big;
 }
 
 u_int8_t Vaso::get_quatd_massa(){
     if (this->type == SMALL)
-        return MASSA_SMALL;
+        return massa_small;
     if (this->type == MEDIUM)
-        return MASSA_MEDIAM;
-    return     MASSA_BIG;
+        return massa_median;
+    return     massa_big;
 }
 
 u_int8_t   Vaso::get_quatd_pedra(){
     if (this->type == SMALL)
-        return PEDRA_SMALL;
+        return pedra_small;
     if (this->type == MEDIUM)
-        return PEDRA_MEDIAM;
-    return     PEDRA_BIG;
+        return pedra_median;
+    return     pedra_big;
 }
 
 
