@@ -82,6 +82,39 @@ void set_parameters(const vector<string>& tokens){
 							printf("\n================================================================================\n");
 							exit(ERRO_INPUT_ARGS);
 					}
+      }else if (tokens[0].compare("uso_massa")==0){
+					if (tokens.size()==4){
+							massa_small  = stof(tokens[1]);
+							massa_median = stof(tokens[2]);
+							massa_big    = stof(tokens[3]);
+					}else{
+							printf("\n================================================================================\n");
+							printf("\n[ERRO] Entrada de argumentos via arquivo, token %s\n", tokens[0].c_str());
+							printf("\n================================================================================\n");
+							exit(ERRO_INPUT_ARGS);
+					}
+      }else if (tokens[0].compare("uso_pedra")==0){
+					if (tokens.size()==4){
+							pedra_small  = stof(tokens[1]);
+							pedra_median = stof(tokens[2]);
+							pedra_big    = stof(tokens[3]);
+					}else{
+							printf("\n================================================================================\n");
+							printf("\n[ERRO] Entrada de argumentos via arquivo, token %s\n", tokens[0].c_str());
+							printf("\n================================================================================\n");
+							exit(ERRO_INPUT_ARGS);
+					}
+      }else if (tokens[0].compare("uso_espaco")==0){
+					if (tokens.size()==4){
+							space_small  = stof(tokens[1]);
+							space_median = stof(tokens[2]);
+							space_big    = stof(tokens[3]);
+					}else{
+							printf("\n================================================================================\n");
+							printf("\n[ERRO] Entrada de argumentos via arquivo, token %s\n", tokens[0].c_str());
+							printf("\n================================================================================\n");
+							exit(ERRO_INPUT_ARGS);
+					}
       }else if (tokens[0].compare("probs")==0){
 					if (tokens.size()==4){
 							Vaso::prob_small  = stof(tokens[1]);
@@ -95,9 +128,9 @@ void set_parameters(const vector<string>& tokens){
 					}
       }else if (tokens[0].compare("tam_ped")==0){
 					if (tokens.size()==4){
-							SM_quatd_vasos.time_min  = stoul(tokens[1]);
-							SM_quatd_vasos.time_mode = stoul(tokens[2]);
-							SM_quatd_vasos.time_max  = stoul(tokens[3]);
+							SM_quatd_vasos.time_min  = stof(tokens[1]);
+							SM_quatd_vasos.time_mode = stof(tokens[2]);
+							SM_quatd_vasos.time_max  = stof(tokens[3]);
 					}else{
 							printf("\n================================================================================\n");
 							printf("\n[ERRO] Entrada de argumentos via arquivo, token %s\n", tokens[0].c_str());
@@ -106,9 +139,9 @@ void set_parameters(const vector<string>& tokens){
 					}
       }else if (tokens[0].compare("freq_ped")==0){
 					if (tokens.size()==4){
-							SM_quatd_pedidos.time_min  = stoul(tokens[1]);
-							SM_quatd_pedidos.time_mode = stoul(tokens[2]);
-							SM_quatd_pedidos.time_max  = stoul(tokens[3]);
+							SM_quatd_pedidos.time_min  = stof(tokens[1]);
+							SM_quatd_pedidos.time_mode = stof(tokens[2]);
+							SM_quatd_pedidos.time_max  = stof(tokens[3]);
 					}else{
 							printf("\n================================================================================\n");
 							printf("\n[ERRO] Entrada de argumentos via arquivo, token %s\n", tokens[0].c_str());
