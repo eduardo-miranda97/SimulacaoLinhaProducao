@@ -170,7 +170,7 @@ void base_set_init(){
 
     bool flag = true;
     if (new_event.uses.art){
-        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+        if (SM_massa <= SM_massa_MIN){
             flag = false;
             event_t prep_massa = new_event;
             prep_massa.time_event += trand(SM_times_events["prep_massa"]);
@@ -183,7 +183,7 @@ void base_set_init(){
             #endif
             goto SEC_ACAB_BASE_LABEL;
 
-        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+        }else if (SM_pedra <= SM_pedra_MIN){
             flag = false;
             event_t prep_pedra = new_event;
             prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
@@ -488,7 +488,7 @@ void base_clearing(){
     #endif
     bool flag = true;
     if (new_event.uses.art){
-        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+        if (SM_massa <= SM_massa_MIN){
             flag = false;
             event_t prep_massa = new_event;
             prep_massa.time_event += trand(SM_times_events["prep_massa"]);
@@ -501,7 +501,7 @@ void base_clearing(){
             #endif
             goto LIMP_BASE;
 
-        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+        }else if (SM_pedra <= SM_pedra_MIN){
             flag = false;
             event_t prep_pedra = new_event;
             prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
@@ -821,7 +821,7 @@ void mouth_set_init(){
 
     bool flag = true;
     if (new_event.uses.art){
-        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+        if (SM_massa <= SM_massa_MIN){
             flag = false;
             event_t prep_massa = new_event;
             prep_massa.time_event += trand(SM_times_events["prep_massa"]);
@@ -834,7 +834,7 @@ void mouth_set_init(){
             #endif
             goto ACAB_INICIAL_BOCA;
 
-        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+        }else if (SM_pedra <= SM_pedra_MIN){
             flag = false;
             event_t prep_pedra = new_event;
             prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
@@ -1130,7 +1130,7 @@ void mount_clearing(){
 
     bool flag = true;
     if (new_event.uses.art){
-        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+        if (SM_massa <= SM_massa_MIN){
             flag = false;
             event_t prep_massa = new_event;
             prep_massa.time_event += trand(SM_times_events["prep_massa"]);
@@ -1143,7 +1143,7 @@ void mount_clearing(){
             #endif
             goto LIMP_BOCA;
 
-        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+        }else if (SM_pedra <= SM_pedra_MIN){
             flag = false;
             event_t prep_pedra = new_event;
             prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
@@ -1426,7 +1426,7 @@ void inter_waterpoofing(){
     #endif
 
     bool flag = true;
-    if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+    if (SM_massa <= SM_massa_MIN){
         flag = false;
         event_t prep_massa = new_event;
         prep_massa.time_event += trand(SM_times_events["prep_massa"]);
@@ -1438,7 +1438,7 @@ void inter_waterpoofing(){
         #endif
         insert_list_event(prep_massa);
 
-    }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+    }else if (SM_pedra <= SM_pedra_MIN){
         flag = false;
         event_t prep_pedra = new_event;
         prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
@@ -1702,7 +1702,7 @@ void varnishing(){
     remove_list_event(&(SM_list_event_simulation[0]));
 
     bool flag = true;
-    if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+    if (SM_massa <= SM_massa_MIN){
         flag = false;
         event_t prep_massa = new_event;
         prep_massa.time_event += trand(SM_times_events["prep_massa"]);
@@ -1714,7 +1714,7 @@ void varnishing(){
         #endif
         insert_list_event(prep_massa);
 
-    }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+    }else if (SM_pedra <= SM_pedra_MIN){
         flag = false;
         event_t prep_pedra = new_event;
         prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
@@ -1945,7 +1945,7 @@ void final_drying(){
     SM_espaco_secagem += new_event.uses.vaso->get_quatd_espace();
 
     if (Artesao::is_free()){
-        if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+        if (SM_massa <= SM_massa_MIN){
             event_t prep_massa = new_event;
             prep_massa.time_event += trand(SM_times_events["prep_massa"]);
             prep_massa.funct_event = &preparation_massa;
@@ -1960,7 +1960,7 @@ void final_drying(){
             #endif
             goto SECAGEM_FINAL;
 
-        }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+        }else if (SM_pedra <= SM_pedra_MIN){
             event_t prep_pedra = new_event;
             prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
             prep_pedra.funct_event = &preparation_pedras;
@@ -2177,10 +2177,10 @@ void final_drying(){
           #if LOG
               file_log << "Remove FILA PREPARA_FORMA vaso ID: " << vaso->get_id() << std::endl
                       << "Agendado PREPARA_FORMA ";
-              if (new_event.uses.art)
-                  file_log << "artesao ID: " << new_event.uses.art->get_id();
+              if (fila_prepara_form.uses.art)
+                  file_log << "artesao ID: " << fila_prepara_form.uses.art->get_id();
               else
-                  file_log << "especialista ID: " << new_event.uses.esp->get_id();
+                  file_log << "especialista ID: " << fila_prepara_form.uses.esp->get_id();
               file_log << " vaso ID: " << vaso->get_id()
                       << " TIME: " << fila_prepara_form.time_event << std::endl;
           #endif
@@ -2207,7 +2207,7 @@ void preparation_massa(){
 
     bool flag = true;
     SM_massa = SM_massa_MAX;
-    if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+    if (SM_massa <= SM_massa_MIN){
         flag = false;
         event_t prep_massa = new_event;
         prep_massa.time_event += trand(SM_times_events["prep_massa"]);
@@ -2218,7 +2218,7 @@ void preparation_massa(){
             file_log << std::endl << "SECAGEM_ACABAMENTO_BASE TIME: " << SM_time_simulation << std::endl;
         #endif
 
-    }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+    }else if (SM_pedra <= SM_pedra_MIN){
         flag = false;
         event_t prep_pedra = new_event;
         prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
@@ -2429,7 +2429,7 @@ void preparation_pedras(){
 
     bool flag = true;
     SM_pedra = SM_pedra_MAX;
-    if (SM_massa <= SM_massa_MIN*SM_massa_MAX){
+    if (SM_massa <= SM_massa_MIN){
         flag = false;
         event_t prep_massa = new_event;
         prep_massa.time_event += trand(SM_times_events["prep_massa"]);
@@ -2441,7 +2441,7 @@ void preparation_pedras(){
                     << " TIME: " << prep_massa.time_event << std::endl;
         #endif
 
-    }else if (SM_pedra <= SM_pedra_MIN*SM_pedra_MAX){
+    }else if (SM_pedra <= SM_pedra_MIN){
         flag = false;
         event_t prep_pedra = new_event;
         prep_pedra.time_event += trand(SM_times_events["prep_pedra"]);
@@ -2639,32 +2639,5 @@ void preparation_pedras(){
                 file_log << "Estado Ocioso artesao ID: " << new_event.uses.art->get_id()
                         << " TIME: " << new_event.time_event << std::endl;
             #endif
-    }
-}
-
-void new_day(){
-    SM_time_simulation = SM_list_event_simulation[0].event.time_event;
-    remove_list_event(&(SM_list_event_simulation[0]));
-
-    event_list_t* list = SM_list_event_simulation;
-    while (list->next_event)
-        if (list->event.time_event < (SM_time_simulation+16)){
-            list = list->next_event;
-        }else{
-            list = list->prev_event;
-            break;
-        }
-
-    while (list){
-        event_list_t* prev_list = list->prev_event;
-        if ((list->event.funct_event != &varnishing)     || (list->event.funct_event != &inter_waterpoofing) ||
-            (list->event.funct_event != &mount_clearing) || (list->event.funct_event != &mouth_set_init)    ||
-            (list->event.funct_event != &base_set_init)){
-                list->event.time_event += (SM_time_simulation+16);
-                event_t new_event = list->event;
-                remove_list_event(list);
-                insert_list_event(new_event);
-        }
-        list = prev_list;
     }
 }
