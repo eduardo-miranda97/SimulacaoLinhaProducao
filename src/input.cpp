@@ -59,23 +59,23 @@ void set_parameters(const vector<string>& tokens){
 					if (tokens[1].compare("TSM")==0){
 							SM_final_time_simulation = stof(tokens[2]);
 		      }else if (tokens[1].compare("espac_secagem")==0){
-		          SM_espaco_secagem = stoul(tokens[2]);
+		          SM_espaco_secagem = stof(tokens[2]);
 		      }else if (tokens[1].compare("num_art")==0){
-		          SM_quatd_art = stoul(tokens[2]);
+		          SM_quatd_art = stof(tokens[2]);
 					}else if (tokens[1].compare("num_esp")==0){
-		          SM_quatd_esp = stoul(tokens[2]);
+		          SM_quatd_esp = stof(tokens[2]);
 					}else if (tokens[1].compare("qtd_massa")==0){
-		          SM_massa = stoul(tokens[2]);
+		          SM_massa = stof(tokens[2]);
 					}else if (tokens[1].compare("qtd_massa_max")==0){
-		          SM_massa_MAX = stoul(tokens[2]);
+		          SM_massa_MAX = stof(tokens[2]);
 					}else if (tokens[1].compare("qtd_pedra")==0){
-		          SM_pedra = stoul(tokens[2]);
+		          SM_pedra = stof(tokens[2]);
 					}else if (tokens[1].compare("qtd_pedra_max")==0){
-		          SM_pedra_MAX = stoul(tokens[2]);
+		          SM_pedra_MAX = stof(tokens[2]);
 					}else if (tokens[1].compare("qtd_massa_min")==0){
-		          SM_massa_MIN = atof(tokens[2].c_str());
+		          SM_massa_MIN = stof(tokens[2]);
 					}else if (tokens[1].compare("qtd_pedra_min")==0){
-		          SM_pedra_MIN = atof(tokens[2].c_str());
+		          SM_pedra_MIN = stof(tokens[2]);
 					}else{
 							printf("\n================================================================================\n");
 							printf("\n[ERRO] Entrada de argumentos via arquivo, token %s\n", tokens[1].c_str());
@@ -151,9 +151,9 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("prep_massa")==0){
 					if (tokens.size()==4){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["prep_massa"] = times;//{tokens[1], tokens[2], tokens[3]};
 					}else{
 							printf("\n================================================================================\n");
@@ -164,9 +164,9 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("prep_pedra")==0){
 					if (tokens.size()==4){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["prep_pedra"] = times;//{tokens[1], tokens[2], tokens[3]};
 					}else{
 							printf("\n================================================================================\n");
@@ -177,17 +177,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("prep_form")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["prep_form-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["prep_form-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["prep_form-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -198,17 +198,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("prep_base")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["prep_base-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["prep_base-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["prep_base-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -219,17 +219,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("acab_ini_base")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["acab_ini_base-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["acab_ini_base-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["acab_ini_base-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -240,17 +240,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("sec_acab_base")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["sec_acab_base-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["sec_acab_base-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["sec_acab_base-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -261,17 +261,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("limp_acab_base")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["limp_acab_base-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["limp_acab_base-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["limp_acab_base-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -282,17 +282,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("secagem_base")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["secagem_base-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["secagem_base-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["secagem_base-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -303,17 +303,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("prep_boca")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["prep_boca-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["prep_boca-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["prep_boca-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -324,17 +324,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("acab_ini_boca")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["acab_ini_boca-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["acab_ini_boca-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["acab_ini_boca-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -345,17 +345,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("sec_acab_boca")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["sec_acab_boca-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["sec_acab_boca-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["sec_acab_boca-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -366,17 +366,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("limp_acab_boca")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["limp_acab_boca-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["limp_acab_boca-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["limp_acab_boca-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -387,17 +387,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("secagem_boca")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["secagem_boca-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["secagem_boca-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["secagem_boca-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -408,17 +408,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("imp_interna")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["imp_interna-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["imp_interna-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["imp_interna-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -429,17 +429,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("sec_interna")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["sec_interna-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["sec_interna-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["sec_interna-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -450,17 +450,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("env_geral")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["env_geral-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["env_geral-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["env_geral-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
@@ -471,17 +471,17 @@ void set_parameters(const vector<string>& tokens){
       }else if (tokens[0].compare("sec_final")==0){
 					if (tokens.size()==10){
 							times_triangular_t times;
-							times.time_min  = stoul(tokens[1]);
-							times.time_mode = stoul(tokens[2]);
-							times.time_max  = stoul(tokens[3]);
+							times.time_min  = stof(tokens[1]);
+							times.time_mode = stof(tokens[2]);
+							times.time_max  = stof(tokens[3]);
 							SM_times_events["sec_final-s"] = times;//{tokens[1], tokens[2], tokens[3]};
-							times.time_min  = stoul(tokens[4]);
-							times.time_mode = stoul(tokens[5]);
-							times.time_max  = stoul(tokens[6]);
+							times.time_min  = stof(tokens[4]);
+							times.time_mode = stof(tokens[5]);
+							times.time_max  = stof(tokens[6]);
 							SM_times_events["sec_final-m"] = times;//{tokens[4], tokens[5], tokens[6]};
-							times.time_min  = stoul(tokens[7]);
-							times.time_mode = stoul(tokens[8]);
-							times.time_max  = stoul(tokens[9]);
+							times.time_min  = stof(tokens[7]);
+							times.time_mode = stof(tokens[8]);
+							times.time_max  = stof(tokens[9]);
 							SM_times_events["sec_final-b"] = times;//{tokens[7], tokens[8], tokens[9]};
 					}else{
 							printf("\n================================================================================\n");
