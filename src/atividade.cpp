@@ -432,11 +432,11 @@ void base_set_drying(){
     #endif
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["sec_acab_base-s"]);
+        new_event.time_event  += trand(SM_times_events["limp_acab_base-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["sec_acab_base-m"]);
+        new_event.time_event  += trand(SM_times_events["limp_acab_base-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["sec_acab_base-b"]);
+        new_event.time_event  += trand(SM_times_events["limp_acab_base-b"]);
     }
     if (Especialista::is_free()){
         Especialista* especialista  = Especialista::get_free();
@@ -697,11 +697,11 @@ void base_clearing(){
 LIMP_BASE:
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["limp_acab_base-s"]);
+        new_event.time_event  += trand(SM_times_events["secagem_base-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["limp_acab_base-m"]);
+        new_event.time_event  += trand(SM_times_events["secagem_base-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["limp_acab_base-b"]);
+        new_event.time_event  += trand(SM_times_events["secagem_base-b"]);
     }
 
     if (flag){
@@ -742,11 +742,11 @@ void base_finish(){
     #endif
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["secagem_base-s"]);
+        new_event.time_event  += trand(SM_times_events["prep_boca-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["secagem_base-m"]);
+        new_event.time_event  += trand(SM_times_events["prep_boca-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["secagem_base-b"]);
+        new_event.time_event  += trand(SM_times_events["prep_boca-b"]);
     }
     if (Especialista::is_free()){
         Especialista* especialista  = Especialista::get_free();
@@ -795,11 +795,11 @@ void mouth_preparation(){
 
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["prep_boca-s"]);
+        new_event.time_event  += trand(SM_times_events["acab_ini_boca-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["prep_boca-m"]);
+        new_event.time_event  += trand(SM_times_events["acab_ini_boca-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["prep_boca-b"]);
+        new_event.time_event  += trand(SM_times_events["acab_ini_boca-b"]);
     }
     new_event.funct_event = &mouth_set_init;
     #if LOG
@@ -1029,11 +1029,11 @@ void mouth_set_init(){
 ACAB_INICIAL_BOCA:
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["acab_ini_boca-s"]);
+        new_event.time_event  += trand(SM_times_events["sec_acab_boca-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["acab_ini_boca-m"]);
+        new_event.time_event  += trand(SM_times_events["sec_acab_boca-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["acab_ini_boca-b"]);
+        new_event.time_event  += trand(SM_times_events["sec_acab_boca-b"]);
     }
 
     if (flag){
@@ -1075,11 +1075,11 @@ void mouth_set_drying(){
     #endif
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["sec_acab_boca-s"]);
+        new_event.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["sec_acab_boca-m"]);
+        new_event.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["sec_acab_boca-b"]);
+        new_event.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
     }
 
     if (Especialista::is_free()){
@@ -1339,11 +1339,11 @@ void mount_clearing(){
 LIMP_BOCA:
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["limp_acab_boca-s"]);
+        new_event.time_event  += trand(SM_times_events["secagem_boca-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["limp_acab_boca-m"]);
+        new_event.time_event  += trand(SM_times_events["secagem_boca-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["limp_acab_boca-b"]);
+        new_event.time_event  += trand(SM_times_events["secagem_boca-b"]);
     }
 
     if (flag){
@@ -1390,11 +1390,11 @@ void mount_drying(){
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
 
         if (new_event.uses.vaso->get_type() == SMALL){
-            new_event.time_event  += trand(SM_times_events["secagem_boca-s"]);
+            new_event.time_event  += trand(SM_times_events["imp_interna-s"]);
         }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            new_event.time_event  += trand(SM_times_events["secagem_boca-m"]);
+            new_event.time_event  += trand(SM_times_events["imp_interna-m"]);
         }else{
-            new_event.time_event  += trand(SM_times_events["secagem_boca-b"]);
+            new_event.time_event  += trand(SM_times_events["imp_interna-b"]);
         }
 
         new_event.funct_event = &inter_waterpoofing;
@@ -1630,11 +1630,11 @@ void inter_waterpoofing(){
     }
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["sec_acab_base-s"]);
+        new_event.time_event  += trand(SM_times_events["sec_interna-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["sec_acab_base-m"]);
+        new_event.time_event  += trand(SM_times_events["sec_interna-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["sec_acab_base-b"]);
+        new_event.time_event  += trand(SM_times_events["sec_interna-b"]);
     }
 
     if (flag){
@@ -1672,11 +1672,11 @@ void inter_drying(){
         artesao->set_time_ociosity(SM_time_simulation-artesao->get_start_ociosity());
 
         if (new_event.uses.vaso->get_type() == SMALL){
-            new_event.time_event  += trand(SM_times_events["sec_interna-s"]);
+            new_event.time_event  += trand(SM_times_events["env_geral-s"]);
         }else if (new_event.uses.vaso->get_type() == MEDIUM){
-            new_event.time_event  += trand(SM_times_events["sec_interna-m"]);
+            new_event.time_event  += trand(SM_times_events["env_geral-m"]);
         }else{
-            new_event.time_event  += trand(SM_times_events["sec_interna-b"]);
+            new_event.time_event  += trand(SM_times_events["env_geral-b"]);
         }
 
         new_event.funct_event = &varnishing;
@@ -1906,11 +1906,11 @@ void varnishing(){
     }
 
     if (new_event.uses.vaso->get_type() == SMALL){
-        new_event.time_event  += trand(SM_times_events["env_geral-s"]);
+        new_event.time_event  += trand(SM_times_events["sec_final-s"]);
     }else if (new_event.uses.vaso->get_type() == MEDIUM){
-        new_event.time_event  += trand(SM_times_events["env_geral-m"]);
+        new_event.time_event  += trand(SM_times_events["sec_final-m"]);
     }else{
-        new_event.time_event  += trand(SM_times_events["env_geral-b"]);
+        new_event.time_event  += trand(SM_times_events["sec_final-b"]);
     }
 
     if (flag){
